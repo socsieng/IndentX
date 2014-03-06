@@ -13,3 +13,7 @@ The main difference with this impelementation being:
 	* One of the short comings of [Indent Xml](https://sublime.wbond.net/packages/Indent%20XML) is that it only worked with valid XML
 * It doesn't re-order your attributes
 	* [Indent Xml](https://sublime.wbond.net/packages/Indent%20XML) re-orders XML attributes
+
+## Installation
+
+Install using Package Control.
