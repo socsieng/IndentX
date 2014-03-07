@@ -26,45 +26,44 @@ def repeat_string(string, count):
     return output
 
 def indent_xml(xml, indent, initialDepth):
-    depth = 0
-    prev = 0
-    add = False
-    indent = '    '
-    tag = re.compile(r'\s*(<[!/]?[^>]+>)\s*')
-    comment = re.compile(r'^<!--')
-    close = re.compile(r'\s*<\/')
-    self_close = re.compile(r'\/>')
-    nl = '\n'
+    section = {'depth': 0, 
+                'prev':0, 
+                'add':False, 
+                'indent':'    ', 
+                'tag':re.compile(r'\s*(<[!/]?[^>]+>)\s*'),
+                'nl':'\n',
+                'comment': re.compile(r'^<!--'),
+                'close':re.compile(r'\s*<\/'),
+                'self_close':re.compile(r'\/>')}
 
     def replace_with_indent(match):
-        nonlocal nl, depth, prev, add, indent, tag, comment, close, self_close
         output = ''
         p = match.group(0)
 
-        if close.search(p):
-            if depth == prev and add:
+        if section['close'].search(p):
+            if section['depth'] == section['prev'] and section['add']:
                 output += p
-                depth -= 1
+                section['depth'] -= 1
             else:
-                depth -= 1
-                output += nl + repeat_string(indent, depth) + p
-            add = False
-        elif self_close.search(p):
-            output += nl + repeat_string(indent, depth) + p
-            add = False
-        elif comment.search(p):
-            output += nl + repeat_string(indent, depth) + p
+                section['depth'] -= 1
+                output += section['nl'] + repeat_string(section['indent'], section['depth']) + p
+            section['add'] = False
+        elif section['self_close'].search(p):
+            output += section['nl'] + repeat_string(section['indent'], section['depth']) + p
+            section['add'] = False
+        elif section['comment'].search(p):
+            output += section['nl'] + repeat_string(section['indent'], section['depth']) + p
         else:
-            output += nl + repeat_string(indent, depth) + p
-            depth += 1
-            add = True
+            output += section['nl'] + repeat_string(section['indent'], section['depth']) + p
+            section['depth'] += 1
+            section['add'] = True
 
-        prev = depth
+        section['prev'] = section['depth']
         return output
 
-    if depth != 0:
+    if section['depth'] != 0:
         print('Unmatched tags exist')
 
-    indented = tag.sub(replace_with_indent, xml)
+    indented = section['tag'].sub(replace_with_indent, xml)
     blank = re.compile(r'^\s*$\r?\n', re.M)
     return blank.sub('', indented)
