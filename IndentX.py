@@ -19,12 +19,6 @@ class BasicIndentTagsCommand(sublime_plugin.TextCommand):
             self.view.replace(edit, doc_region, indented_content)
 
 
-def repeat_string(string, count):
-    output = ''
-    for x in range(count):
-        output += string
-    return output
-
 def indent_xml(xml, indent, initialDepth):
     class Section:
         depth = 0
@@ -49,15 +43,15 @@ def indent_xml(xml, indent, initialDepth):
                 section.depth -= 1
             else:
                 section.depth -= 1
-                output += section.nl + repeat_string(section.indent, section.depth) + p
+                output += section.nl + (section.indent * section.depth) + p
             section.add = False
         elif section.self_close.search(p):
-            output += section.nl + repeat_string(section.indent, section.depth) + p
+            output += section.nl + (section.indent * section.depth) + p
             section.add = False
         elif section.comment.search(p):
-            output += section.nl + repeat_string(section.indent, section.depth) + p
+            output += section.nl + (section.indent * section.depth) + p
         else:
-            output += section.nl + repeat_string(section.indent, section.depth) + p
+            output += section.nl + (section.indent * section.depth) + p
             section.depth += 1
             section.add = True
 
