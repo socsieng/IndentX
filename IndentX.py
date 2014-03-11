@@ -84,7 +84,7 @@ class BasicIndentTagsCommand(sublime_plugin.TextCommand):
     def run(self, edit):
         regions = self.view.sel()
 
-        if (regions[0].empty or len(regions) == 0):
+        if (len(regions) == 0 or regions[0].empty()):
             size = self.view.size()
             region = sublime.Region(0, size)
             regions = [region]
