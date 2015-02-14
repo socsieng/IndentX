@@ -6,7 +6,6 @@ class XmlIndentFormater(object):
     position = 0
     depth = 0
     prevDepth = 0
-    indentString = '    '
     add = False
     beforeString = '\n'
     openExp = re.compile(r'<(?![/?!])[^>]+(?<!/)>')
@@ -16,6 +15,9 @@ class XmlIndentFormater(object):
     closeCommentExp = re.compile(r'-->')
     expressions = [openExp, closeExp, openCommentExp, closeCommentExp, selfClosingExp]
     trimExp = re.compile(r'(^\s*|\s*$)')
+
+    def __init__(self, indentString = '\t'):
+        self.indentString = indentString
 
     def getFirstMatch(self, string, startPos):
         pos = len(string)
@@ -83,6 +85,10 @@ class XmlIndentFormater(object):
 class BasicIndentTagsCommand(sublime_plugin.TextCommand):
     def run(self, edit):
         regions = self.view.sel()
+        indentString = '\t'
+
+        if self.view.settings().get('translate_tabs_to_spaces'):
+            indentString = ' ' * self.view.settings().get('tab_size')
 
         if (len(regions) == 0 or regions[0].empty()):
             size = self.view.size()
@@ -90,7 +96,7 @@ class BasicIndentTagsCommand(sublime_plugin.TextCommand):
             regions = [region]
 
         for selection in regions:
-            formatter = XmlIndentFormater()
+            formatter = XmlIndentFormater(indentString)
             text = self.view.substr(selection)
             formattedText = formatter.indent(text)
             self.view.replace(edit, selection, formattedText)
