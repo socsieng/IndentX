@@ -19,11 +19,16 @@ def is_string_value(input_string):
     return char == '\'' or char == '"'
 
 def ensure_quotes(input_string, quote_char = '"'):
-    neg_quote_exp = re.compile('(\')' if quote_char == '\'' else '(")')
+    other_char = '\'' if quote_char == '"' else '"'
+    esc_quote_exp = re.compile('(' + quote_char + ')')
+    unesc_quote_exp = re.compile('(\\\\' + other_char + ')')
     wrap_exp = re.compile('^["\']?(.+?)["\']?$')
 
     def quote_replacer(match):
-        return quote_char + neg_quote_exp.sub('\\\\\\1', match.group(1)) + quote_char
+        inner = match.group(1)
+        inner = unesc_quote_exp.sub(other_char, inner)
+        inner = esc_quote_exp.sub('\\\\\\1', inner)
+        return quote_char + inner + quote_char
 
     output = wrap_exp.sub(quote_replacer, input_string)
 

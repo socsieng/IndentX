@@ -13,6 +13,7 @@ from preggy import expect
 from tests.base import TestCase
 from json_formatting import JsonReader
 from json_formatting import JsonFormatter
+from json_formatting import ensure_quotes
 
 class JsonFormatterTestCase(TestCase):
     def test_should_format_empty_object(self):
