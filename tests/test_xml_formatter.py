@@ -11,7 +11,7 @@
 from preggy import expect
 
 from tests.base import TestCase
-from xml_formatter import XmlIndentFormatter
+from xml_formatting import XmlIndentFormatter
 
 class XmlIndentFormatterTestCases(TestCase):
     def test_should_format_basic_xml(self):

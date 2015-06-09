@@ -10,7 +10,9 @@ omit =
     *tests.py
 branch = True
 source =
-    xml_formatter
+    general_formatting
+    json_formatting
+    xml_formatting
 
 [report]
 exclude_lines =

@@ -15,7 +15,7 @@ import sublime_plugin
 
 sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 
-from xml_formatter import XmlIndentFormatter
+from general_formatting import GeneralFormatter
 
 class BasicIndentTagsCommand(sublime_plugin.TextCommand):
     def run(self, edit):
@@ -31,7 +31,7 @@ class BasicIndentTagsCommand(sublime_plugin.TextCommand):
             regions = [region]
 
         for selection in regions:
-            formatter = XmlIndentFormatter(indentString)
+            formatter = GeneralFormatter()
             text = self.view.substr(selection)
-            formattedText = formatter.indent(text)
+            formattedText = formatter.format(text, indentString)
             self.view.replace(edit, selection, formattedText)
