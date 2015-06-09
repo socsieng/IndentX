@@ -1,6 +1,10 @@
 [
     {
-        "command": "basic_indent_tags",
+        "command": "basic_indent",
         "caption": "IndentX: Indent"
+    },
+    {
+        "command": "json_indent_format",
+        "caption": "IndentX: Indent & format JSON"
     }
 ]

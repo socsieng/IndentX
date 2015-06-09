@@ -16,8 +16,10 @@ import sublime_plugin
 sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 
 from general_formatting import GeneralFormatter
+from json_formatting import JsonReader
+from json_formatting import JsonFormatter
 
-class BasicIndentTagsCommand(sublime_plugin.TextCommand):
+class BasicIndentCommand(sublime_plugin.TextCommand):
     def run(self, edit):
         regions = self.view.sel()
         indentString = '\t'
@@ -34,4 +36,24 @@ class BasicIndentTagsCommand(sublime_plugin.TextCommand):
             formatter = GeneralFormatter()
             text = self.view.substr(selection)
             formattedText = formatter.format(text, indentString)
+            self.view.replace(edit, selection, formattedText)
+
+class JsonIndentFormatCommand(sublime_plugin.TextCommand):
+    def run(self, edit):
+        regions = self.view.sel()
+        indentString = '\t'
+
+        if self.view.settings().get('translate_tabs_to_spaces'):
+            indentString = ' ' * self.view.settings().get('tab_size')
+
+        if (len(regions) == 0 or regions[0].empty()):
+            size = self.view.size()
+            region = sublime.Region(0, size)
+            regions = [region]
+
+        for selection in regions:
+            text = self.view.substr(selection)
+            reader = JsonReader(text)
+            formatter = JsonFormatter(reader, {'force_property_quotes': True, 'quote_char': '"', 'normalize_strings': True, 'indent_character': indentString})
+            formattedText = formatter.format()
             self.view.replace(edit, selection, formattedText)
