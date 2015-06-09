@@ -20,7 +20,7 @@ def is_string_value(input_string):
 
 def ensure_quotes(input_string, quote_char = '"'):
     other_char = '\'' if quote_char == '"' else '"'
-    esc_quote_exp = re.compile('(' + quote_char + ')')
+    esc_quote_exp = re.compile('(?<!\\\\)(' + quote_char + ')')
     unesc_quote_exp = re.compile('(\\\\' + other_char + ')')
     wrap_exp = re.compile('^["\']?(.+?)["\']?$')
 

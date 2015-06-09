@@ -45,3 +45,7 @@ class EnsureQuotesTestCase(TestCase):
     def test_should_unescape_double_quotes_within_string(self):
         output = ensure_quotes('"I\'m \\"great\\""', '\'')
         expect(output).to_equal('\'I\\\'m "great"\'')
+
+    def test_should_not_escape_already_escaped_quotes(self):
+        output = ensure_quotes('\'how\\\'s it \\"going\\"?\'', '"')
+        expect(output).to_equal('"how\'s it \\"going\\"?"')
