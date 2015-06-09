@@ -1,20 +1,44 @@
 # IndentX
 
-A basic xml indentation plugin for sublime.
+IndentX a forgiving indentation plugin for Sublime Text inspired by [Indent Xml](https://sublime.wbond.net/packages/Indent%20XML), aimed primarily at preserving attribute and property ordering and working with *invalid* document.
 
-This plugin was inspired by [Indent Xml](https://sublime.wbond.net/packages/Indent%20XML).
+Supported content type:
 
-The main difference with this impelementation being:
+* XML*-like* content
+* JSON-*like* content
 
-* It is very dumb - it looks for open and close tags only
-	* When an open tag is found, it will increase indent by one
-	* When a close tag is found, it will decrease indent by one
-* It doesn't require valid XML
-	* One of the short comings of [Indent Xml](https://sublime.wbond.net/packages/Indent%20XML) is that it only worked with valid XML
-* It doesn't re-order your attributes
-	* [Indent Xml](https://sublime.wbond.net/packages/Indent%20XML) re-orders XML attributes
+## Usage: keyboard short-cuts
 
-Support for json coming soon.
+### Indenting
+
+The *Indent* command will format both XML and JSON like content (content guess based on the first character `<` for XML) and can be accessed using the following keyboard short-cuts:
+
+* Windows: `control` + `shift` + `,` (think `control` + `<`)
+* Mac: `command` + `shift` + `,` (think `command` + `<`)
+* Linux: `control` + `shift` + `,` (think `control` + `<`)
+
+### JSON formatting
+
+The *Indent & format JSON* will try and indent convert JavaScript looking objects to JSON (e.g. wrapping attributes in `"`) and can be accessed using the following keyboard short-cuts:
+
+* Windows: `control` + `shift` + `[` (think `control` + `{`)
+* Mac: `command` + `shift` + `[` (think `command` + `{`)
+* Linux: `control` + `shift` + `[` (think `control` + `{`)
+
+Note: If starting with a JavaScript object and you want to maintain the JavaScipt object format, use the [Indent](#Indenting) command instead.
+
+## How it works
+
+IndentX uses regular expressions (probably more than it should) to identify tokens to:
+
+* insert new lines
+* increase indentation (begin tag/object)
+* decrease indentation (end tag/object)
+
+This technique has the following benefits:
+
+* doesn't require valid strict XML or JSON (close enough should be good enough)
+* preserves attribute order
 
 ## Installation
 
