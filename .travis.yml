@@ -1,0 +1,21 @@
+# This file is part of IndentX.
+# https://github.com/socsieng/IndentX
+
+# Licensed under the MIT license:
+# http://www.opensource.org/licenses/MIT-license
+# Copyright (c) 2015, Socheat Sieng <socsieng@gmail.com>
+
+language: python
+
+python:
+    - "2.7"
+    - "3.4"
+    - "pypy"
+
+install:
+    # install python requirements
+    - make setup
+
+script:
+    # run tests
+    - make test

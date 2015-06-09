@@ -1,0 +1,22 @@
+# This file is part of IndentX.
+# https://github.com/socsieng/IndentX
+
+# Licensed under the MIT license:
+# http://www.opensource.org/licenses/MIT-license
+# Copyright (c) 2015, Socheat Sieng <socsieng@gmail.com>
+
+[run]
+omit =
+    *tests.py
+branch = True
+source =
+    xml_formatter
+
+[report]
+exclude_lines =
+    pragma: no cover
+    def __repr__
+    raise NotImplementedError
+    if __name__ == .__main__.:
+    from urllib.parse import parse_qs
+    except ImportError:
