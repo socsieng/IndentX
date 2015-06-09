@@ -14,6 +14,8 @@ The main difference with this impelementation being:
 * It doesn't re-order your attributes
 	* [Indent Xml](https://sublime.wbond.net/packages/Indent%20XML) re-orders XML attributes
 
+Support for json coming soon.
+
 ## Installation
 
 Install using Package Control.
