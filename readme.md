@@ -1,8 +1,8 @@
 # IndentX
 
-IndentX a forgiving indentation plugin for Sublime Text inspired by [Indent Xml](https://sublime.wbond.net/packages/Indent%20XML), aimed primarily at preserving attribute and property ordering and working with *invalid* document.
+IndentX a forgiving indentation plugin for Sublime Text inspired by [Indent Xml](https://sublime.wbond.net/packages/Indent%20XML), aimed primarily at preserving attribute ordering and working with *invalid* content.
 
-Supported content type:
+Supported content types:
 
 * XML*-like* content
 * JSON-*like* content
