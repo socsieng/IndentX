@@ -1,6 +1,6 @@
 # IndentX [![Build Status](https://travis-ci.org/socsieng/IndentX.svg)](https://travis-ci.org/socsieng/IndentX)
 
-IndentX a forgiving indentation plugin for Sublime Text inspired by [Indent Xml](https://sublime.wbond.net/packages/Indent%20XML), aimed primarily at preserving attribute ordering and working with *invalid* content.
+IndentX is a forgiving indentation plugin for Sublime Text inspired by [Indent Xml](https://sublime.wbond.net/packages/Indent%20XML), aimed primarily at preserving attribute ordering and working with *invalid* content.
 
 Supported content types:
 
@@ -11,19 +11,19 @@ Supported content types:
 
 ### Indenting
 
-The *Indent* command will format both XML and JSON like content (content guess based on the first character `<` for XML) and can be accessed using the following keyboard short-cuts:
+The *Indent* command will format both XML and JSON like content (content guess based on the first character `<` for XML) and can be accessed using the following keyboard short-cuts (think angle brackets: `control`/`command` + `<`):
 
-* Windows: `control` + `shift` + `,` (think `control` + `<`)
-* Mac: `command` + `shift` + `,` (think `command` + `<`)
-* Linux: `control` + `shift` + `,` (think `control` + `<`)
+* Windows: `control` + `shift` + `,`
+* Mac: `command` + `shift` + `,`
+* Linux: `control` + `shift` + `,`
 
 ### JSON formatting
 
-The *Indent & format JSON* will try and indent convert JavaScript looking objects to JSON (e.g. wrapping attributes in `"`) and can be accessed using the following keyboard short-cuts:
+The *Indent & format JSON* will try and indent and convert JavaScript-like objects to JSON (e.g. wrapping attributes in `"` and converting `'` strings to `"`). It can be accessed using the following keyboard short-cuts (think curly braces: `control`/`command` + `{`):
 
-* Windows: `control` + `shift` + `[` (think `control` + `{`)
-* Mac: `command` + `shift` + `[` (think `command` + `{`)
-* Linux: `control` + `shift` + `[` (think `control` + `{`)
+* Windows: `control` + `shift` + `[`
+* Mac: `command` + `shift` + `[`
+* Linux: `control` + `shift` + `[`
 
 Note: If starting with a JavaScript object and you want to maintain the JavaScipt object format, use the [Indent](#Indenting) command instead.
 
