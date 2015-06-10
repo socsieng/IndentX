@@ -1,10 +1,10 @@
 [
-    {
-        "command": "basic_indent",
-        "caption": "IndentX: Indent"
-    },
-    {
-        "command": "json_indent_format",
-        "caption": "IndentX: Indent & format JSON"
-    }
+  {
+    "command": "basic_indent",
+    "caption": "IndentX: Indent"
+  },
+  {
+    "command": "json_indent_format",
+    "caption": "IndentX: Indent & format JSON"
+  }
 ]
