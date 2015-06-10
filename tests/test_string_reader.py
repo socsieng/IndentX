@@ -14,6 +14,14 @@ from tests.base import TestCase
 from json_formatting import StringReader
 
 class StringReaderTestCase(TestCase):
+    def test_should_not_read_null(self):
+        reader = StringReader(None)
+        expect(reader.read()).to_equal(None)
+
+    def test_should_not_read_empty_string(self):
+        reader = StringReader('')
+        expect(reader.read()).to_equal(None)
+
     def test_should_read_full_string(self):
         reader = StringReader('"has token"')
         expect(reader.read()).to_equal('"has token"')

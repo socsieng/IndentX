@@ -21,22 +21,24 @@ class StringReader:
     def read(self):
         start = self._original_position
         position = self._original_position
-        char = self._value[position]
 
-        if char == '"' or char == '\'':
-            position += 1
+        if self._value:
+            char = self._value[position]
 
-            while True:
-                end = self._find_first_token([char, '\\\\' + char, '$'], position)
+            if char == '"' or char == '\'':
+                position += 1
 
-                if end:
-                    position = end.end()
-                    if len(end.group(0)) == 0 or end.group(0)[0] != '\\':
-                        break
+                while True:
+                    end = self._find_first_token([char, '\\\\' + char, '$'], position)
 
-            result = self._value[start:position]
+                    if end:
+                        position = end.end()
+                        if len(end.group(0)) == 0 or end.group(0)[0] != '\\':
+                            break
 
-            return result
+                result = self._value[start:position]
+
+                return result
 
         return None
 
