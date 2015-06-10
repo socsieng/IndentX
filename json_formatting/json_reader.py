@@ -21,7 +21,8 @@ class JsonReader:
         ['end_array', re.compile('\\]')],
         ['property_separator', re.compile(':')],
         ['value_separator', re.compile(',')],
-        ['literal', re.compile('[\'"\\w_\\-+.]+')]
+        ['property', re.compile('[\'"\\w_\\-+.]+(?=\\s*:)')],
+        ['value', re.compile('[\'"\\w_\\-+.]+(?!\\s*:)')]
     ]
 
     def __init__(self, json):
@@ -50,20 +51,13 @@ class JsonReader:
             value = min_match.group(0)
             token_type = min_token[0]
 
-            if token_type == 'literal':
+            if token_type == 'property' or token_type == 'value':
                 sr = StringReader(self._json, min_match.start())
                 string_value = sr.read()
 
                 if string_value:
                     value = string_value
                     self._position = min_match.start() + len(string_value)
-
-                prop_sep = re.compile('\\s*:').search(self._json, self._position)
-
-                if prop_sep and prop_sep.start() == self._position:
-                    token_type = 'property'
-                else:
-                    token_type = 'value'
 
             self._value = JsonReaderValue(token_type, value)
 
