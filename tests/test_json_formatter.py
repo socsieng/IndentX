@@ -114,16 +114,30 @@ class JsonFormatterTestCase(TestCase):
         output = formatter.format()
         expect(output).to_equal('{\n  \'hello\': \'world\',\n  \'value\': 123\n}')
 
-    def test_should_preserve_inline_comment(self):
+    def test_should_preserve_end_line_comment(self):
         reader = JsonReader('{\'"hello"\':"world", // comment\n\'value\':123}')
         formatter = JsonFormatter(reader, {'force_property_quotes': True})
 
         output = formatter.format()
         expect(output).to_equal('{\n  "\\"hello\\"": "world", // comment\n  "value": 123\n}')
 
-    def test_should_preserve_inline_comment_forcing_new_line_for_subsequent_tokens(self):
+    def test_should_preserve_end_line_comment_forcing_new_line_for_subsequent_tokens(self):
         reader = JsonReader('{\'"hello"\':"world",\n// full line comment\n\'value\'://comment\n123}')
         formatter = JsonFormatter(reader, {'force_property_quotes': True})
 
         output = formatter.format()
         expect(output).to_equal('{\n  "\\"hello\\"": "world",\n  // full line comment\n  "value": //comment\n  123\n}')
+
+    def test_should_preserve_new_line_comment_block(self):
+        reader = JsonReader('{\'"hello"\':"world",\n/* comment\nblock */ \'value\':123}')
+        formatter = JsonFormatter(reader, {'force_property_quotes': True})
+
+        output = formatter.format()
+        expect(output).to_equal('{\n  "\\"hello\\"": "world",\n  /* comment\nblock */\n  "value": 123\n}')
+
+    def test_should_preserve_in_line_comment_block(self):
+        reader = JsonReader('{\'"hello"\':"world", /* comment block */ \'value\':123}')
+        formatter = JsonFormatter(reader, {'force_property_quotes': True})
+
+        output = formatter.format()
+        expect(output).to_equal('{\n  "\\"hello\\"": "world", /* comment block */\n  "value": 123\n}')

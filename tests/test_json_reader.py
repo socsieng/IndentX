@@ -351,7 +351,7 @@ class JsonReaderTestCase(TestCase):
 
         result = reader.read()
         expect(result).to_be_true()
-        expect(result.type).to_equal('full_line_comment')
+        expect(result.type).to_equal('new_line_comment')
         expect(result.value).to_equal('// this is a comment')
 
     def test_should_find_comment_on_end_of_line(self):
@@ -366,3 +366,29 @@ class JsonReaderTestCase(TestCase):
         expect(result).to_be_true()
         expect(result.type).to_equal('end_line_comment')
         expect(result.value).to_equal('// this is a comment')
+
+    def test_should_find_new_line_comment_block(self):
+        reader = JsonReader('/* this is a\nblock comment */')
+
+        result = reader.read()
+        expect(result).to_be_true()
+        expect(result.type).to_equal('new_line_comment_block')
+        expect(result.value).to_equal('/* this is a\nblock comment */')
+
+    def test_should_find_in_line_comment_block(self):
+        reader = JsonReader('before /* this is a\nblock comment */ after */')
+
+        result = reader.read()
+        expect(result).to_be_true()
+        expect(result.type).to_equal('value')
+        expect(result.value).to_equal('before')
+
+        result = reader.read()
+        expect(result).to_be_true()
+        expect(result.type).to_equal('in_line_comment_block')
+        expect(result.value).to_equal('/* this is a\nblock comment */')
+
+        result = reader.read()
+        expect(result).to_be_true()
+        expect(result.type).to_equal('value')
+        expect(result.value).to_equal('after')

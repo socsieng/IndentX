@@ -23,8 +23,10 @@ class JsonReader:
         ['value_separator', re.compile(',')],
         ['property', re.compile('[\'"\\w_\\-+.]+(?=\\s*:)')],
         ['value', re.compile('[\'"\\w_\\-+.]+(?!\\s*:)')],
-        ['full_line_comment', re.compile('^\s*//.+$', re.M)],
-        ['end_line_comment', re.compile('//.+$', re.M)]
+        ['new_line_comment', re.compile('^\\s*//.+$', re.M)],
+        ['end_line_comment', re.compile('//.+$', re.M)],
+        ['new_line_comment_block', re.compile('^\\s*/\\*[\\s\\S]*?\\*/', re.M)],
+        ['in_line_comment_block', re.compile('/\\*[\\s\\S]*?\\*/', re.M)]
     ]
 
     def __init__(self, json):
@@ -60,7 +62,7 @@ class JsonReader:
                 if string_value:
                     value = string_value
                     self._position = min_match.start() + len(string_value)
-            elif token_type == 'full_line_comment':
+            elif token_type == 'new_line_comment' or token_type == 'new_line_comment_block':
                 value = value.strip()
 
             self._value = JsonReaderValue(token_type, value)
