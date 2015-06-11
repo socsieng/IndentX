@@ -1,10 +1,10 @@
 [
   {
-    "keys": ["super+shift+,"],
+    "keys": ["super+k", "super+,"],
     "command": "basic_indent"
   },
   {
-    "keys": ["super+shift+["],
+    "keys": ["super+k", "super+["],
     "command": "json_indent_format"
   }
 ]

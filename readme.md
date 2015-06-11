@@ -11,19 +11,19 @@ Supported content types:
 
 ### Indenting
 
-The *Indent* command will format both XML and JSON like content (content guess based on the first character `<` for XML) and can be accessed using the following keyboard short-cuts (think angle brackets: `control`/`command` + `<`):
+The *Indent* command will format both XML and JSON like content (content guess based on the first character `<` for XML) and can be accessed using the following keyboard short-cuts (think angle brackets: `control`/`command` + `k` + `<`):
 
-* Windows: `control` + `shift` + `,`
-* Mac: `command` + `shift` + `,`
-* Linux: `control` + `shift` + `,`
+* Windows: `control` + `k` + `,`
+* Mac: `command` + `k` + `,`
+* Linux: `control` + `k` + `,`
 
 ### JSON formatting
 
-The *Indent & format JSON* will try and indent and convert JavaScript-like objects to JSON (e.g. wrapping attributes in `"` and converting `'` strings to `"`). It can be accessed using the following keyboard short-cuts (think curly braces: `control`/`command` + `{`):
+The *Indent & format JSON* will try and indent and convert JavaScript-like objects to JSON (e.g. wrapping attributes in `"` and converting `'` strings to `"`). It can be accessed using the following keyboard short-cuts (think curly braces: `control`/`command` + `k` + `{`):
 
-* Windows: `control` + `shift` + `[`
-* Mac: `command` + `shift` + `[`
-* Linux: `control` + `shift` + `[`
+* Windows: `control` + `k` + `[`
+* Mac: `command` + `k` + `[`
+* Linux: `control` + `k` + `[`
 
 *JSON before and after formatting:*
 

@@ -1,10 +1,10 @@
 [
   {
-    "keys": ["ctrl+shift+,"],
+    "keys": ["ctrl+k", "ctrl+,"],
     "command": "basic_indent"
   },
   {
-    "keys": ["ctrl+shift+["],
+    "keys": ["ctrl+k", "ctrl+["],
     "command": "json_indent_format"
   }
 ]

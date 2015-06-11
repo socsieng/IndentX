@@ -29,7 +29,7 @@ try:
 
     setup(
         name='IndentX',
-        version='0.3.5',
+        version='0.4.0',
         description='Forgiving document indenter',
         long_description='''
     A forgiving document indenter for Sublime Text 3.
