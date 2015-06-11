@@ -25,6 +25,11 @@ The *Indent & format JSON* will try and indent and convert JavaScript-like objec
 * Mac: `command` + `shift` + `[`
 * Linux: `control` + `shift` + `[`
 
+*JSON before and after formatting:*
+
+![Before JSON formatting](docs/images/json_before.png)
+![After JSON formatting](docs/images/json_after.png)
+
 Note: If starting with a JavaScript object and you want to maintain the JavaScipt object format, use the [Indent](#Indenting) command instead.
 
 ## How it works
