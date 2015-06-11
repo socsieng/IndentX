@@ -345,3 +345,24 @@ class JsonReaderTestCase(TestCase):
 
         result = reader.read()
         expect(result).to_be_false()
+
+    def test_should_find_comment_on_line_by_itself(self):
+        reader = JsonReader('\t// this is a comment')
+
+        result = reader.read()
+        expect(result).to_be_true()
+        expect(result.type).to_equal('full_line_comment')
+        expect(result.value).to_equal('// this is a comment')
+
+    def test_should_find_comment_on_end_of_line(self):
+        reader = JsonReader('something // this is a comment')
+
+        result = reader.read()
+        expect(result).to_be_true()
+        expect(result.type).to_equal('value')
+        expect(result.value).to_equal('something')
+
+        result = reader.read()
+        expect(result).to_be_true()
+        expect(result.type).to_equal('end_line_comment')
+        expect(result.value).to_equal('// this is a comment')

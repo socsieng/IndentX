@@ -53,6 +53,7 @@ class JsonFormatter:
         indent = 0
         reader = self._reader
         has_properties = False
+        is_last_token_comment = False
 
         while True:
             should_linebreak = False
@@ -60,6 +61,10 @@ class JsonFormatter:
 
             if not result:
                 break
+
+            if is_last_token_comment:
+                should_linebreak = True
+                is_last_token_comment = False
 
             if result.type == 'begin_object':
                 has_properties = False
@@ -71,6 +76,11 @@ class JsonFormatter:
             elif result.type == 'property':
                 should_linebreak = True
                 has_properties = True
+            elif result.type == 'full_line_comment':
+                is_last_token_comment = True
+                should_linebreak = True
+            elif result.type == 'end_line_comment':
+                is_last_token_comment = True
 
 
             # new line
@@ -85,6 +95,10 @@ class JsonFormatter:
                 output += ensure_quotes(result.value, self._options['quote_char'])
             elif result.type == 'value' and 'normalize_strings' in self._options and self._options['normalize_strings'] and is_string_value(result.value):
                 output += ensure_quotes(result.value, self._options['quote_char'])
+            elif result.type == 'end_line_comment':
+                if len(output) > 0 and output[len(output) - 1] == ' ':
+                    output = output[:len(output) - 1]
+                output += ' ' + result.value
             else:
                 output += result.value
 
