@@ -22,7 +22,7 @@ class JsonReader:
         ['property_separator', re.compile(':')],
         ['value_separator', re.compile(',')],
         ['property', re.compile('[\'"\\w_\\-+.]+(?=\\s*:)')],
-        ['value', re.compile('[\'"\\w_\\-+.]+(?!\\s*:)')],
+        ['value', re.compile('([\'"\\w_\\-+.][\'"\\w_\\-+. \\t()]*)(?!\\s*:)(?=[\\n,]?)')],
         ['new_line_comment', re.compile('^\\s*//.+$', re.M)],
         ['end_line_comment', re.compile('//.+$', re.M)],
         ['new_line_comment_block', re.compile('^\\s*/\\*[\\s\\S]*?\\*/', re.M)],
@@ -60,9 +60,10 @@ class JsonReader:
                 string_value = sr.read()
 
                 if string_value:
-                    value = string_value
-                    self._position = min_match.start() + len(string_value)
-            elif token_type == 'new_line_comment' or token_type == 'new_line_comment_block':
+                    value = string_value.strip()
+                    self._position = min_match.start() + len(value)
+
+            if value:
                 value = value.strip()
 
             self._value = JsonReaderValue(token_type, value)

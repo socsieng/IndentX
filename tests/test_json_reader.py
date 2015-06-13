@@ -392,3 +392,35 @@ class JsonReaderTestCase(TestCase):
         expect(result).to_be_true()
         expect(result.type).to_equal('value')
         expect(result.value).to_equal('after')
+
+    def test_should_find_expression_like_value(self):
+        reader = JsonReader('abc + 123 - xyz')
+
+        result = reader.read()
+        expect(result).to_be_true()
+        expect(result.type).to_equal('value')
+        expect(result.value).to_equal('abc + 123 - xyz')
+
+    def test_should_find_expression_like_value_terminated_by_comma(self):
+        reader = JsonReader('abc + 123 - xyz, abc')
+
+        result = reader.read()
+        expect(result).to_be_true()
+        expect(result.type).to_equal('value')
+        expect(result.value).to_equal('abc + 123 - xyz')
+
+    def test_should_find_expression_like_value_terminated_by_new_line(self):
+        reader = JsonReader('abc + 123 - xyz\nabc')
+
+        result = reader.read()
+        expect(result).to_be_true()
+        expect(result.type).to_equal('value')
+        expect(result.value).to_equal('abc + 123 - xyz')
+
+    def test_should_find_expression_like_value_terminated_by_new_line(self):
+        reader = JsonReader('abc("hello")')
+
+        result = reader.read()
+        expect(result).to_be_true()
+        expect(result.type).to_equal('value')
+        expect(result.value).to_equal('abc("hello")')
