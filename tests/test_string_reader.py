@@ -46,6 +46,14 @@ class StringReaderTestCase(TestCase):
         reader = StringReader('"this has a\nnew line"')
         expect(reader.read()).to_equal('"this has a')
 
+    def test_should_read_empt_string_double_quotes(self):
+        reader = StringReader('""')
+        expect(reader.read()).to_equal('""')
+
+    def test_should_read_empt_string_single_quotes(self):
+        reader = StringReader('\'\'')
+        expect(reader.read()).to_equal('\'\'')
+
     def test_should_not_read_value_not_starting_with_string_character(self):
         reader = StringReader('blah "stuff"')
         expect(reader.read()).to_equal(None)

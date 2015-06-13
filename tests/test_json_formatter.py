@@ -107,6 +107,13 @@ class JsonFormatterTestCase(TestCase):
         output = formatter.format()
         expect(output).to_equal('{\n  \'hello\': "world",\n  \'value\': 123\n}')
 
+    def test_should_format_property_with_empty_string_and_normalized_strings(self):
+        reader = JsonReader('{\'hello\':\'\'}')
+        formatter = JsonFormatter(reader, {'force_property_quotes': True, 'normalize_strings': True})
+
+        output = formatter.format()
+        expect(output).to_equal('{\n  "hello": ""\n}')
+
     def test_should_format_property_values_with_normalized_strings(self):
         reader = JsonReader('{\'hello\':"world" ,"value":123}')
         formatter = JsonFormatter(reader, {'force_property_quotes': True, 'quote_char': '\'', 'normalize_strings': True})

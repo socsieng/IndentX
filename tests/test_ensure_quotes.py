@@ -18,13 +18,17 @@ class EnsureQuotesTestCase(TestCase):
         output = ensure_quotes('hello', '"')
         expect(output).to_equal('"hello"')
 
-    def test_should_note_add_quotes_to_quoted_value(self):
+    def test_should_not_add_quotes_to_quoted_value(self):
         output = ensure_quotes('"hello"', '"')
         expect(output).to_equal('"hello"')
 
-    def test_should_note_add_quotes_to_unterminated_value(self):
+    def test_should_not_add_quotes_to_unterminated_value(self):
         output = ensure_quotes('"hello', '"')
         expect(output).to_equal('"hello"')
+
+    def test_should_flip_empty_single_quotes_to_double_quotes(self):
+        output = ensure_quotes('\'\'', '"')
+        expect(output).to_equal('""')
 
     def test_should_flip_single_quotes_to_double_quotes(self):
         output = ensure_quotes('\'hello\'', '"')
