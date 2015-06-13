@@ -11,7 +11,7 @@
 from preggy import expect
 
 from tests.base import TestCase
-from json_formatting import ensure_quotes
+from general_formatting.string_utility import ensure_quotes
 
 class EnsureQuotesTestCase(TestCase):
     def test_should_add_quotes_to_unquoted_value(self):

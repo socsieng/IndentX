@@ -15,7 +15,7 @@ import sublime_plugin
 
 sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 
-from general_formatting import GeneralFormatter
+from general_formatting.general_formatter import GeneralFormatter
 from json_formatting import JsonReader
 from json_formatting import JsonFormatter
 

@@ -11,7 +11,7 @@
 from preggy import expect
 
 from tests.base import TestCase
-from general_formatting import GeneralFormatter
+from general_formatting.general_formatter import GeneralFormatter
 
 class GeneralFormatterTestCases(TestCase):
     def test_should_identify_and_format_basic_xml(self):

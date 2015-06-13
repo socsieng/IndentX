@@ -8,9 +8,8 @@
 # http://www.opensource.org/licenses/MIT-license
 # Copyright (c) 2015, Socheat Sieng <socsieng@gmail.com>
 
-from general_formatting.collection import Collection
-from general_formatting.comment import Comment
 from general_formatting.document import Document
-from general_formatting.property import Property
-from general_formatting.property_name import PropertyName
-from general_formatting.value import Value
+
+class Collection(Document):
+    def __init__(self, children = None):
+        self.children = children if children else []

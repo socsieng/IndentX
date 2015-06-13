@@ -13,26 +13,7 @@ import copy
 
 from json_formatting.json_reader_value import *
 from json_formatting.string_reader import *
-
-def is_string_value(input_string):
-    char = input_string[0]
-    return char == '\'' or char == '"'
-
-def ensure_quotes(input_string, quote_char = '"'):
-    other_char = '\'' if quote_char == '"' else '"'
-    esc_quote_exp = re.compile('(?<!\\\\)(' + quote_char + ')')
-    unesc_quote_exp = re.compile('(\\\\' + other_char + ')')
-    wrap_exp = re.compile('^["\']?(.+?)["\']?$')
-
-    def quote_replacer(match):
-        inner = match.group(1)
-        inner = unesc_quote_exp.sub(other_char, inner)
-        inner = esc_quote_exp.sub('\\\\\\1', inner)
-        return quote_char + inner + quote_char
-
-    output = wrap_exp.sub(quote_replacer, input_string)
-
-    return output
+from general_formatting.string_utility import is_string_value, ensure_quotes
     
 class JsonFormatter:
     default_options = {
