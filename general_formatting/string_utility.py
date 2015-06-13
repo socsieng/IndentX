@@ -32,7 +32,8 @@ def ensure_quotes(input_string, quote_char = '"'):
 
 def unwrap_quotes(input_string):
     if is_string_value(input_string):
-        output = input_string.strip(input_string[0])
+        output = re.compile('^' + input_string[0]).sub('', input_string)
+        output = re.compile(input_string[0] + '$').sub('', output)
         output = re.compile('\\\\').sub('', output)
         return output
 
