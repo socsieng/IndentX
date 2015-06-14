@@ -16,8 +16,10 @@ import sublime_plugin
 sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 
 from general_formatting.general_formatter import GeneralFormatter
+from general_formatting import document_builder
 from json_formatting import JsonReader
 from json_formatting import JsonFormatter
+from json_formatting import JsonDocumentRenderer
 
 class BasicIndentCommand(sublime_plugin.TextCommand):
     def run(self, edit):
@@ -54,6 +56,7 @@ class JsonIndentFormatCommand(sublime_plugin.TextCommand):
         for selection in regions:
             text = self.view.substr(selection)
             reader = JsonReader(text)
-            formatter = JsonFormatter(reader, {'force_property_quotes': True, 'quote_char': '"', 'normalize_strings': True, 'indent_character': indentString})
-            formattedText = formatter.format()
+            document = document_builder.build(reader)
+            renderer = JsonDocumentRenderer(document, {'force_property_quotes': True, 'quote_char': '"', 'normalize_strings': True, 'indent_character': indentString})
+            formattedText = renderer.render()
             self.view.replace(edit, selection, formattedText)

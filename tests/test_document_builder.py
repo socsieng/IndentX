@@ -383,3 +383,31 @@ class JsonFormatterTestCase(TestCase):
         expect(prop.name.value).to_equal('value')
         expect(prop.value.value).to_equal('123')
         expect(prop.value.value_type).to_equal('number')
+
+    def test_should_create_document_with_comments_after_object_property(self):
+        reader = JsonReader('{obj:{hello:"world"}/*comment*/}')
+        doc = document_builder.build(reader)
+
+        expect(doc).not_to_be_null()
+        expect(doc).to_be_instance_of(Document)
+        expect(len(doc.children)).to_equal(2)
+
+        prop = doc.children[0]
+        expect(prop).not_to_be_null()
+        expect(prop.name.value).to_equal('obj')
+        expect(prop.value.value_type).to_equal('object')
+
+        obj = prop.value.value
+        expect(obj).not_to_be_null()
+        expect(len(obj.children)).to_equal(1)
+
+        prop = obj.children[0]
+        expect(prop).not_to_be_null()
+        expect(prop.name.value).to_equal('hello')
+        expect(prop.value.value).to_equal('world')
+        expect(prop.value.value_type).to_equal('string')
+
+        comm = doc.children[1]
+        expect(comm).not_to_be_null()
+        expect(comm).to_be_instance_of(Comment)
+        expect(comm.value).to_equal('comment')

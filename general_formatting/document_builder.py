@@ -30,6 +30,10 @@ def build(reader):
         elif result.type == 'begin_array':
             document = create_collection(reader)
 
+        comment = handle_comments(result)
+        if comment:
+            document.children.append(comment)
+
     return document
 
 def create_document(reader):
@@ -37,6 +41,7 @@ def create_document(reader):
 
     while True:
         result = reader.peek()
+
         if not result or result.type == 'end_object':
             break
 
