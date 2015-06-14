@@ -13,6 +13,7 @@ from preggy import expect
 from tests.base import TestCase
 from json_formatting import JsonReader
 from general_formatting import Collection
+from general_formatting import Comment
 from general_formatting import Document
 from general_formatting import document_builder
 from json_formatting import ensure_quotes
@@ -62,6 +63,7 @@ class JsonFormatterTestCase(TestCase):
 
         obj = doc.children[1].value
         expect(obj).not_to_be_null()
+        expect(val.value_type).to_equal('object')
 
         prop = obj.children[0]
         expect(prop).not_to_be_null()
@@ -79,7 +81,7 @@ class JsonFormatterTestCase(TestCase):
         comm = doc.children[0]
         expect(comm).not_to_be_null()
         expect(comm.value).to_equal('new comment here')
-        expect(comm.comment_type).to_equal('line')
+        expect(comm.comment_type).to_equal('end_line_comment')
 
         val = doc.children[1]
         expect(val).not_to_be_null()
@@ -110,7 +112,7 @@ class JsonFormatterTestCase(TestCase):
         comm = val.comments[0]
         expect(comm).not_to_be_null()
         expect(comm.value).to_equal('this is number 2')
-        expect(comm.comment_type).to_equal('line')
+        expect(comm.comment_type).to_equal('end_line_comment')
 
         val = doc.children[2]
         expect(val).not_to_be_null()
@@ -228,7 +230,7 @@ class JsonFormatterTestCase(TestCase):
 
         comm = doc.children[0]
         expect(comm).not_to_be_null()
-        expect(comm.comment_type).to_equal('block')
+        expect(comm.comment_type).to_equal('in_line_comment_block')
         expect(comm.value).to_equal('block comment')
 
         prop = doc.children[1]
@@ -247,7 +249,7 @@ class JsonFormatterTestCase(TestCase):
 
         comm = doc.children[0]
         expect(comm).not_to_be_null()
-        expect(comm.comment_type).to_equal('line')
+        expect(comm.comment_type).to_equal('end_line_comment')
         expect(comm.value).to_equal('line comment')
 
         prop = doc.children[1]
@@ -310,7 +312,7 @@ class JsonFormatterTestCase(TestCase):
 
         comm = prop.name.comments[0]
         expect(comm).not_to_be_null()
-        expect(comm.comment_type).to_equal('block')
+        expect(comm.comment_type).to_equal('in_line_comment_block')
         expect(comm.value).to_equal('block\ncomment')
 
     def test_should_create_document_with_property_value_line_comment(self):
@@ -329,5 +331,55 @@ class JsonFormatterTestCase(TestCase):
 
         comm = prop.name.comments[0]
         expect(comm).not_to_be_null()
-        expect(comm.comment_type).to_equal('line')
+        expect(comm.comment_type).to_equal('end_line_comment')
         expect(comm.value).to_equal('line comment')
+
+    def test_should_create_document_with_property_value_as_array_of_objects(self):
+        reader = JsonReader('{"arr":[{"int":123,"str":"hello"},{"int":123,"str":"hello"}]}')
+        doc = document_builder.build(reader)
+
+        expect(doc).not_to_be_null()
+        expect(doc).to_be_instance_of(Document)
+        expect(len(doc.children)).to_equal(1)
+
+        prop = doc.children[0]
+        expect(prop).not_to_be_null()
+        expect(prop.name.value).to_equal('arr')
+        expect(prop.value.value_type).to_equal('array')
+
+        arr = prop.value.value
+        expect(arr).not_to_be_null()
+        expect(arr).to_be_instance_of(Collection)
+
+        obj = arr.children[0].value
+        expect(obj).not_to_be_null()
+        expect(obj).to_be_instance_of(Document)
+
+        obj = arr.children[1].value
+        expect(obj).not_to_be_null()
+        expect(obj).to_be_instance_of(Document)
+
+    def test_should_create_document_new_line_comment_block(self):
+        reader = JsonReader('{\'"hello"\':"world",\n/* comment\nblock */ \'value\':123}')
+        doc = document_builder.build(reader)
+
+        expect(doc).not_to_be_null()
+        expect(doc).to_be_instance_of(Document)
+        expect(len(doc.children)).to_equal(3)
+
+        prop = doc.children[0]
+        expect(prop).not_to_be_null()
+        expect(prop.name.value).to_equal('"hello"')
+        expect(prop.value.value).to_equal('world')
+        expect(prop.value.value_type).to_equal('string')
+
+        comm = doc.children[1]
+        expect(comm).not_to_be_null()
+        expect(comm).to_be_instance_of(Comment)
+        expect(comm.value).to_equal('comment\nblock')
+
+        prop = doc.children[2]
+        expect(prop).not_to_be_null()
+        expect(prop.name.value).to_equal('value')
+        expect(prop.value.value).to_equal('123')
+        expect(prop.value.value_type).to_equal('number')

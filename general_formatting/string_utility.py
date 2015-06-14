@@ -30,6 +30,15 @@ def ensure_quotes(input_string, quote_char = '"'):
 
     return output
 
+def wrap_quotes(input_string, quote_char = '"'):
+    other_char = '\'' if quote_char == '"' else '"'
+    esc_quote_exp = re.compile('(?<!\\\\)(' + quote_char + ')')
+    unesc_quote_exp = re.compile('(\\\\' + other_char + ')')
+
+    output = unesc_quote_exp.sub(other_char, input_string)
+    output = esc_quote_exp.sub('\\\\\\1', output)
+    return quote_char + output + quote_char
+
 def unwrap_quotes(input_string):
     if is_string_value(input_string):
         output = re.compile('^' + input_string[0]).sub('', input_string)
@@ -38,3 +47,26 @@ def unwrap_quotes(input_string):
         return output
 
     return input_string
+
+def strip_leading(input_string, char):
+    start_exp = re.compile('^' + re.escape(char) + '+')
+    return start_exp.sub('', input_string)
+
+def strip_trailing(input_string, char):
+    end_exp = re.compile(re.escape(char) + '+$')
+    return end_exp.sub('', input_string)
+
+def join(char, *params):
+    is_first = True
+    output = ''
+    for p in params:
+        if p == '':
+            continue
+
+        if is_first:
+            is_first = False
+            output += strip_trailing(p, char)
+        else:
+            output += char + strip_leading(strip_trailing(p, char), char)
+
+    return output

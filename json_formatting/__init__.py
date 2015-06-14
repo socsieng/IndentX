@@ -11,3 +11,4 @@
 from json_formatting.json_reader import *
 from json_formatting.json_formatter import *
 from json_formatting.string_reader import *
+from json_formatting.json_document_renderer import *

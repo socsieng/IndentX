@@ -16,8 +16,8 @@ class Comment:
         self._original_value = value
         self.value = value
 
-        if comment_type == 'line':
+        if comment_type == 'end_line_comment' or comment_type == 'new_line_comment':
             self.value = re.compile('^//\\s*').sub('', value)
-        elif comment_type == 'block':
+        elif comment_type == 'in_line_comment_block' or comment_type == 'new_line_comment_block':
             self.value = re.compile('/\\*\\s*([\\s\\S]*?)\\s*\\*/').sub('\\1', value)
 

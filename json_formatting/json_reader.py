@@ -35,7 +35,7 @@ class JsonReader:
         self._current_match = None
         self._value = None
 
-    def read(self):
+    def peek(self):
         min_index = len(self._json)
         min_match = None
         min_token = None
@@ -51,7 +51,7 @@ class JsonReader:
 
         if min_match and min_token:
             self._current_match = min_match
-            self._position = min_match.end()
+            self._peek_position = min_match.end()
             value = min_match.group(0)
             token_type = min_token[0]
 
@@ -61,7 +61,7 @@ class JsonReader:
 
                 if string_value:
                     value = string_value.strip()
-                    self._position = min_match.start() + len(value)
+                    self._peek_position = min_match.start() + len(value)
 
             if value:
                 value = value.strip()
@@ -71,3 +71,11 @@ class JsonReader:
             return self._value
 
         return None
+
+    def read(self):
+        result = self.peek()
+        self._position = self._peek_position
+        return result
+
+    def move(self):
+        self._position = self._peek_position

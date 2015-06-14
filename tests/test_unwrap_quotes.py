@@ -11,7 +11,7 @@
 from preggy import expect
 
 from tests.base import TestCase
-from general_formatting.string_utility import unwrap_quotes
+from general_formatting.string_utility import unwrap_quotes, wrap_quotes, join
 
 class UnwrapQuotesTestCase(TestCase):
     def test_should_unwrap_basic_single_quotes(self):
@@ -37,3 +37,23 @@ class UnwrapQuotesTestCase(TestCase):
     def test_should_unwrap_double_quotes_containing_escaped_double_quote_characters(self):
         output = unwrap_quotes('"hello \\"friends\\""')
         expect(output).to_equal('hello "friends"')
+
+    def test_should_wrap_basic_string_in_quotes(self):
+        output = wrap_quotes('hello')
+        expect(output).to_equal('"hello"')
+
+    def test_should_wrap_quoted_string_in_quotes(self):
+        output = wrap_quotes('"hello"')
+        expect(output).to_equal('"\\"hello\\""')
+
+    def test_should_join_multiple_strings_with_spaces(self):
+        output = join(' ', '1', '2', '3')
+        expect(output).to_equal('1 2 3')
+
+    def test_should_join_multiple_strings_with_regex_special_character(self):
+        output = join('\\', '1', '2', '3')
+        expect(output).to_equal('1\\2\\3')
+
+    def test_should_join_multiple_strings_preserving_first_string_stripping_others(self):
+        output = join('/', '/1/', '/2/', '/3')
+        expect(output).to_equal('/1/2/3')

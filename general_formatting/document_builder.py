@@ -19,9 +19,11 @@ def build(reader):
     document = None
 
     while True:
-        result = reader.read()
+        result = reader.peek()
         if not result:
             break
+
+        reader.move()
 
         if result.type == 'begin_object':
             document = create_document(reader)
@@ -34,10 +36,12 @@ def create_document(reader):
     document = Document()
 
     while True:
-        result = reader.read()
+        result = reader.peek()
         if not result or result.type == 'end_object':
             break
 
+        reader.move()
+        
         element = None
 
         if result.type == 'property':
@@ -57,10 +61,12 @@ def create_property(propertyResult, reader):
     prop = Property(propName)
 
     while True:
-        result = reader.read()
+        result = reader.peek()
         if not result or result.type == 'end_object' or result.type == 'value_separator':
             break
 
+        reader.move()
+        
         if result.type == 'value':
             val = create_value(result, reader)
             prop.value = val
@@ -82,10 +88,12 @@ def create_value(valueResult, reader):
     val = Value(valueResult.value)
 
     while True:
-        result = reader.read()
-        if not result or result.type == 'end_object' or result.type == 'end_array' or result.type == 'value_separator':
+        result = reader.peek()
+        if not result or result.type == 'begin_object' or result.type == 'end_object' or result.type == 'begin_array' or result.type == 'end_array' or result.type == 'value_separator':
             break
 
+        reader.move()
+        
         comment = handle_comments(result)
         if comment:
             val.comments.append(comment)
@@ -96,10 +104,13 @@ def create_collection(reader):
     document = Collection()
 
     while True:
-        result = reader.read()
+        result = reader.peek()
+
         if not result or result.type == 'end_array':
             break
 
+        reader.move()
+        
         element = None
 
         if result.type == 'begin_object':
@@ -120,9 +131,7 @@ def create_collection(reader):
 def handle_comments(result):
     comment = None
 
-    if result.type == 'new_line_comment' or result.type == 'end_line_comment':
-        comment = Comment('line', result.value)
-    elif result.type == 'in_line_comment_block' or result.type == 'end_line_comment_block':
-        comment = Comment('block', result.value)
+    if result.type == 'new_line_comment' or result.type == 'end_line_comment' or result.type == 'in_line_comment_block' or result.type == 'new_line_comment_block':
+        comment = Comment(result.type, result.value)
 
     return comment
