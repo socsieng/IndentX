@@ -19,11 +19,9 @@ def build(reader):
     document = None
 
     while True:
-        result = reader.peek()
+        result = reader.read()
         if not result:
             break
-
-        reader.move()
 
         if result.type == 'begin_object':
             document = create_document(reader)
@@ -40,13 +38,11 @@ def create_document(reader):
     document = Document()
 
     while True:
-        result = reader.peek()
+        result = reader.read()
 
         if not result or result.type == 'end_object':
             break
 
-        reader.move()
-        
         element = None
 
         if result.type == 'property':
@@ -67,15 +63,15 @@ def create_property(propertyResult, reader):
 
     while True:
         result = reader.peek()
+
         if not result or result.type == 'end_object' or result.type == 'value_separator':
             break
 
         reader.move()
-        
+
         if result.type == 'value':
             val = create_value(result, reader)
             prop.value = val
-            break
         elif result.type == 'begin_object':
             document = create_document(reader)
             prop.value = Value(document)
@@ -85,7 +81,10 @@ def create_property(propertyResult, reader):
 
         comment = handle_comments(result)
         if comment:
-            propName.comments.append(comment)
+            if prop.value:
+                prop.value.comments.append(comment)
+            else:
+                propName.comments.append(comment)
 
     return prop
 
@@ -109,17 +108,18 @@ def create_collection(reader):
     document = Collection()
 
     while True:
-        result = reader.peek()
+        result = reader.read()
 
         if not result or result.type == 'end_array':
             break
 
-        reader.move()
-        
         element = None
 
         if result.type == 'begin_object':
             doc = create_document(reader)
+            element = Value(doc)
+        if result.type == 'begin_array':
+            doc = create_collection(reader)
             element = Value(doc)
         if result.type == 'value':
             element = create_value(result, reader)

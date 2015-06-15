@@ -41,6 +41,14 @@ class JsonFormatterTestCase(TestCase):
         output = renderer.render()
         expect(output).to_equal('[1, 2, 3]')
 
+    def test_should_format_array_of_arrays(self):
+        reader = JsonReader('[[1,2,3],[4,5,6]]')
+        document = document_builder.build(reader)
+        renderer = JsonDocumentRenderer(document)
+
+        output = renderer.render()
+        expect(output).to_equal('[[1, 2, 3], [4, 5, 6]]')
+
     def test_should_format_single_property(self):
         reader = JsonReader('{"hello":"world"}')
         document = document_builder.build(reader)

@@ -49,6 +49,51 @@ class JsonFormatterTestCase(TestCase):
         expect(val.value).to_equal('-.3')
         expect(val.value_type).to_equal('number')
 
+    def test_should_create_new_collection_of_collections(self):
+        reader = JsonReader('[[1],[2]]')
+        doc = document_builder.build(reader)
+
+        expect(doc).not_to_be_null()
+        expect(doc).to_be_instance_of(Collection)
+        expect(len(doc.children)).to_equal(2)
+
+        val = doc.children[0]
+        expect(val).not_to_be_null()
+        #expect(val.value).to_equal('1')
+        expect(val.value_type).to_equal('array')
+
+        val = doc.children[1]
+        expect(val).not_to_be_null()
+        #expect(val.value).to_equal('2.')
+        expect(val.value_type).to_equal('array')
+
+    def test_should_create_new_collection_with_comment(self):
+        reader = JsonReader('[1,2 /*comment*/,-3]')
+        doc = document_builder.build(reader)
+
+        expect(doc).not_to_be_null()
+        expect(doc).to_be_instance_of(Collection)
+        expect(len(doc.children)).to_equal(3)
+
+        val = doc.children[0]
+        expect(val).not_to_be_null()
+        expect(val.value).to_equal('1')
+        expect(val.value_type).to_equal('number')
+
+        val = doc.children[1]
+        expect(val).not_to_be_null()
+        expect(val.value).to_equal('2')
+        expect(val.value_type).to_equal('number')
+
+        comm = val.comments[0]
+        expect(comm).not_to_be_null()
+        expect(comm.value).to_equal('comment')
+
+        val = doc.children[2]
+        expect(val).not_to_be_null()
+        expect(val.value).to_equal('-3')
+        expect(val.value_type).to_equal('number')
+
     def test_should_create_new_collection_with_objects(self):
         reader = JsonReader('[{}, {a:2}]')
         doc = document_builder.build(reader)
@@ -390,7 +435,7 @@ class JsonFormatterTestCase(TestCase):
 
         expect(doc).not_to_be_null()
         expect(doc).to_be_instance_of(Document)
-        expect(len(doc.children)).to_equal(2)
+        expect(len(doc.children)).to_equal(1)
 
         prop = doc.children[0]
         expect(prop).not_to_be_null()
@@ -398,6 +443,7 @@ class JsonFormatterTestCase(TestCase):
         expect(prop.value.value_type).to_equal('object')
 
         obj = prop.value.value
+        val = prop.value
         expect(obj).not_to_be_null()
         expect(len(obj.children)).to_equal(1)
 
@@ -407,7 +453,7 @@ class JsonFormatterTestCase(TestCase):
         expect(prop.value.value).to_equal('world')
         expect(prop.value.value_type).to_equal('string')
 
-        comm = doc.children[1]
+        comm = val.comments[0]
         expect(comm).not_to_be_null()
         expect(comm).to_be_instance_of(Comment)
         expect(comm.value).to_equal('comment')

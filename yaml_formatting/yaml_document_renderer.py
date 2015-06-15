@@ -19,7 +19,7 @@ from general_formatting.property import Property
 from general_formatting.property_name import PropertyName
 from general_formatting.value import Value
     
-class JsonDocumentRenderer:
+class YamlDocumentRenderer:
     default_options = {
         'indent_character': '  ',
         'quote_char': '"'
@@ -45,74 +45,60 @@ class JsonDocumentRenderer:
         else:
             output += self.render_document(doc, indent)
 
-        return output
+        return strip_leading(output, '\n')
 
     def render_document(self, doc, indent):
-        start = ''
-        end = ''
         output = ''
-
-        if isinstance(doc, Collection):
-            start += '['
-        else:
-            start += '{'
 
         for item in doc.children:
             if isinstance(item, Comment):
                 output = strip_trailing(output, ' ') + self.render_comment(item, indent)
             elif isinstance(item, Property):
-                output += '\n' + (indent + 1) * self._options['indent_character']
-                output += wrap_quotes(item.name.value, self._options['quote_char']) + ': '
+                output += '\n' + indent * self._options['indent_character']
+                output += item.name.value + ': '
+
                 if len(item.name.comments):
-                    output = join(' ', output, self.render_comments(item.name.comments, indent))
-                    output += '\n' + (indent + 2) * self._options['indent_character']
+                    output = join(' ', output, self.render_comments(item.name.comments, indent + 1))
+                    output += '\n' + (indent + 1) * self._options['indent_character']
                     output += self.render_value(item.value, indent + 1)
                 else:
-                    output = join(' ', output, self.render_value(item.value, indent))
-                output += ','
+                    if isinstance(item.value.value, Document):
+                        output = strip_trailing(output, ' ')
+                    output += self.render_value(item.value, indent)
+                    output = strip_trailing(output, ' ')
             elif isinstance(item, Value):
-                output = join(' ', output, self.render_value(item, indent))
-                output += ','
+                output += '\n' + indent * self._options['indent_character'] + '- '
+                if isinstance(item.value, Document):
+                    output = strip_trailing(output, ' ')
+                output += self.render_value(item, indent)
 
-        output = re.compile(', ?$').sub('', output)
-
-        if isinstance(doc, Collection):
-            end += ']'
-        else:
-            if len(doc.children):
-                end += '\n'
-            end += indent * self._options['indent_character']
-            end += '}'
-
-        return start + output + end
+        return output
 
     def render_comment(self, comment, indent):
+        indent_sequence = '\n' + indent * self._options['indent_character'] + '# '
         if comment.comment_type == 'new_line_comment' or comment.comment_type == 'new_line_comment_block':
-            output = '\n' + (indent + 1) * self._options['indent_character']
+            output = re.compile('^|\\n').sub(indent_sequence, comment.value)
         else:
-            output = ' '
-        output += comment._original_value
+            output = ' # ' + comment.value
         return output
 
     def render_comments(self, comments, indent):
         output = ''
         for comment in comments:
-            if output == '':
-                output = join(' ', output, self.render_comment(comment, indent))
-            else:
-                output = join('\n', output, self.render_comment(comment, indent + 1))
+            output += self.render_comment(comment, indent)
         return output
 
     def render_value(self, val, indent):
-        output = ''
-
         if val.value_type == 'string':
-            output = wrap_quotes(val.value, self._options['quote_char'])
+            output = val.value
         elif val.value_type == 'object':
             output = self.render_document(val.value, indent + 1)
         elif val.value_type == 'array':
-            output = self.render_document(val.value, indent)
+            output = self.render_document(val.value, indent + 1)
         else:
             output = val.value
+
+        if len(val.comments):
+            output = join(' ', output, self.render_comments(val.comments, indent + 1))
 
         return output

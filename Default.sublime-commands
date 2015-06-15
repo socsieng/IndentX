@@ -6,5 +6,9 @@
   {
     "command": "json_indent_format",
     "caption": "IndentX: Indent & format JSON"
+  },
+  {
+    "command": "json_to_yaml",
+    "caption": "IndentX: Convert JSON to YAML"
   }
 ]
