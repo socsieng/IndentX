@@ -1,0 +1,15 @@
+{
+	"str": "value",
+	"number": 123,
+	"boolean": true,
+	"empty_1": "",
+	"empty_2": "",
+	"arr": ["apples", "oranges"],
+	"arr_obj": [{
+		"type": "fruit",
+		"name": "apple"
+	}, {
+		"type": "fruit",
+		"name": "orange"
+	}]
+}
