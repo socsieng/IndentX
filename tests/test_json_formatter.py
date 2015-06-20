@@ -10,6 +10,8 @@
 
 from preggy import expect
 
+import os
+import test_util
 from tests.base import TestCase
 from json_formatting import JsonReader
 from json_formatting import JsonFormatter
@@ -114,6 +116,13 @@ class JsonFormatterTestCase(TestCase):
         output = formatter.format()
         expect(output).to_equal('{\n  "hello": ""\n}')
 
+    def test_should_format_property_with_empty_double_quote_string_and_normalized_strings(self):
+        reader = JsonReader('{\'hello\':""}')
+        formatter = JsonFormatter(reader, {'force_property_quotes': True, 'normalize_strings': True})
+
+        output = formatter.format()
+        expect(output).to_equal('{\n  "hello": ""\n}')
+
     def test_should_format_property_values_with_normalized_strings(self):
         reader = JsonReader('{\'hello\':"world" ,"value":123}')
         formatter = JsonFormatter(reader, {'force_property_quotes': True, 'quote_char': '\'', 'normalize_strings': True})
@@ -148,3 +157,19 @@ class JsonFormatterTestCase(TestCase):
 
         output = formatter.format()
         expect(output).to_equal('{\n  "\\"hello\\"": "world", /* comment block */\n  "value": 123\n}')
+
+def generator(input, expected):
+    def test(self):
+        reader = JsonReader(input)
+        formatter = JsonFormatter(reader, {'force_property_quotes': True, 'indent_character': '\t', 'normalize_strings': True})
+
+        result = formatter.format()
+        self.assertEqual(expected, result)
+    return test
+
+test_util.fs_test.load_testcases(
+    JsonFormatterTestCase,
+    generator,
+    os.path.dirname(__file__), 
+    'data/format/*.input.json',
+    'expected.json')

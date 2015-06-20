@@ -10,6 +10,8 @@
 
 from preggy import expect
 
+import os
+import test_util
 from tests.base import TestCase
 from general_formatting.general_formatter import GeneralFormatter
 
@@ -38,3 +40,17 @@ class GeneralFormatterTestCases(TestCase):
         formatter = GeneralFormatter()
         formattedText = formatter.format(' ', '\t')
         expect(formattedText).to_equal(None)
+
+def generator(input, expected):
+    def test(self):
+        formatter = GeneralFormatter()
+        result = formatter.format(input, '\t')
+        self.assertEqual(expected, result)
+    return test
+
+test_util.fs_test.load_testcases(
+    GeneralFormatterTestCases,
+    generator,
+    os.path.dirname(__file__), 
+    'data/indent/*.input.xml',
+    'expected.xml')
