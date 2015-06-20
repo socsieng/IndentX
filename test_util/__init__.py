@@ -8,4 +8,3 @@
 # http://www.opensource.org/licenses/MIT-license
 # Copyright (c) 2015, Socheat Sieng <socsieng@gmail.com>
 
-import fs_test
