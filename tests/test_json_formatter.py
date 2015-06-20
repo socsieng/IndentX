@@ -11,7 +11,7 @@
 from preggy import expect
 
 import os
-import test_util
+from test_util import fs_test
 from tests.base import TestCase
 from json_formatting import JsonReader
 from json_formatting import JsonFormatter
@@ -167,7 +167,7 @@ def generator(input, expected):
         self.assertEqual(expected, result)
     return test
 
-test_util.fs_test.load_testcases(
+fs_test.load_testcases(
     JsonFormatterTestCase,
     generator,
     os.path.dirname(__file__), 

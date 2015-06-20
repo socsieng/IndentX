@@ -11,7 +11,7 @@
 from preggy import expect
 
 import os
-import test_util
+from test_util import fs_test
 from tests.base import TestCase
 from general_formatting.general_formatter import GeneralFormatter
 
@@ -48,7 +48,7 @@ def generator(input, expected):
         self.assertEqual(expected, result)
     return test
 
-test_util.fs_test.load_testcases(
+fs_test.load_testcases(
     GeneralFormatterTestCases,
     generator,
     os.path.dirname(__file__), 
