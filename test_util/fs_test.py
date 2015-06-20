@@ -11,6 +11,7 @@
 import glob
 import os
 import re
+import io
 
 file_name_expression = re.compile('^[^.]+')
 
@@ -27,8 +28,8 @@ def load_testcases(target_class, test_generator, base_dir, input_files_expressio
         if test_case_name:
             result_path = os.path.join(os.path.dirname(f), test_case_name + '.' + expected_result_suffix)
             if os.path.exists(result_path):
-                input_string = open(f).read()
-                expected_string = open(result_path).read()
+                input_string = io.open(f).read()
+                expected_string = io.open(result_path).read()
                 test = test_generator(input_string, expected_string)
                 setattr(target_class, 'test_' + test_case_name, test)
 
