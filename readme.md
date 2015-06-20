@@ -7,9 +7,15 @@ Supported content types:
 * XML*-like* content
 * JSON-*like* content
 
-## Usage: keyboard short-cuts
+## Available Commands
 
-### Indenting
+* IndentX: Indent
+* IndentX: Indent & format JSON
+* IndentX: Convert JSON to YAML
+
+Note: *IndentX: Convert JSON to YAML* should be considered *alpha*.
+
+### IndentX: Indent
 
 The *Indent* command will format both XML and JSON like content (content guess based on the first character `<` for XML) and can be accessed using the following keyboard short-cuts (think angle brackets: `control`/`command` + `k` + `<`):
 
@@ -17,7 +23,7 @@ The *Indent* command will format both XML and JSON like content (content guess b
 * Mac: `command` + `k` + `,`
 * Linux: `control` + `k` + `,`
 
-### JSON formatting
+### IndentX: Indent & format JSON
 
 The *Indent & format JSON* will try and indent and convert JavaScript-like objects to JSON (e.g. wrapping attributes in `"` and converting `'` strings to `"`). It can be accessed using the following keyboard short-cuts (think curly braces: `control`/`command` + `k` + `{`):
 
@@ -31,6 +37,10 @@ The *Indent & format JSON* will try and indent and convert JavaScript-like objec
 ![After JSON formatting](docs/images/json_after.png)
 
 Note: If starting with a JavaScript object and you want to maintain the JavaScipt object format, use the [Indent](#Indenting) command instead.
+
+### IndentX: Convert JSON to YAML
+
+The *Convert JSON to YAML* command will try to convert a JSON document into YAML. As this feature is still very new, my personal experience with YAML is limited, this feature should be considered very *alpha*. Please [submit any issues](https://github.com/socsieng/IndentX/issues) you may have.
 
 ## How it works
 
