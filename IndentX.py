@@ -57,9 +57,8 @@ class JsonIndentFormatCommand(sublime_plugin.TextCommand):
         for selection in regions:
             text = self.view.substr(selection)
             reader = JsonReader(text)
-            document = document_builder.build(reader)
-            renderer = JsonDocumentRenderer(document, {'force_property_quotes': True, 'quote_char': '"', 'normalize_strings': True, 'indent_character': indentString})
-            formattedText = renderer.render()
+            formatter = JsonFormatter(reader, {'force_property_quotes': True, 'quote_char': '"', 'normalize_strings': True, 'indent_character': indentString})
+            formattedText = formatter.format()
             if formattedText:
                 self.view.replace(edit, selection, formattedText)
 
