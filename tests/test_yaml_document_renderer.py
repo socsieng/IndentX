@@ -10,6 +10,8 @@
 
 from preggy import expect
 
+import os
+from test_util import fs_test
 from tests.base import TestCase
 from general_formatting import document_builder
 from json_formatting import JsonReader
@@ -159,3 +161,24 @@ class YamlFormatterTestCase(TestCase):
 
         output = renderer.render()
         expect(output).to_equal('"hello": world # comment block\n# comment block\nvalue: 123')
+
+def generator(input, expected):
+    def test(self):
+        reader = JsonReader(input)
+        document = document_builder.build(reader)
+        renderer = YamlDocumentRenderer(document, {'indent_character': '\t'})
+        result = renderer.render()
+
+        if expected != result:
+            print expected
+            print result
+            
+        self.assertEqual(expected, result)
+    return test
+
+fs_test.load_testcases(
+    YamlFormatterTestCase,
+    generator,
+    os.path.dirname(__file__), 
+    'data/format/*.input.json',
+    'expected.yaml')

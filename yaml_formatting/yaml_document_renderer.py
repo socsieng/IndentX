@@ -61,7 +61,7 @@ class YamlDocumentRenderer:
                     output = join(' ', output, self.render_comments(item.name.comments, indent + 1))
                     output += '\n' + (indent + 1) * self._options['indent_character']
                     output += self.render_value(item.value, indent + 1)
-                else:
+                elif isinstance(item.value, Value):
                     if isinstance(item.value.value, Document):
                         output = strip_trailing(output, ' ')
                     output += self.render_value(item.value, indent)

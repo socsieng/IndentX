@@ -18,7 +18,13 @@ class Value:
     def __init__(self, value, comments = None):
         self._original_value = value
 
-        if isinstance(value, str):
+        if isinstance(value, Collection):
+            self.value_type = 'array'
+            self.value = value
+        elif isinstance(value, Document):
+            self.value_type = 'object'
+            self.value = value
+        else:
             if is_string_value(value):
                 self.value_type = 'string'
                 self.value = unwrap_quotes(value)
@@ -31,11 +37,5 @@ class Value:
                     self.value_type = 'unknown'
 
                 self.value = value
-        elif isinstance(value, Collection):
-            self.value_type = 'array'
-            self.value = value
-        elif isinstance(value, Document):
-            self.value_type = 'object'
-            self.value = value
 
         self.comments = comments if comments else []
