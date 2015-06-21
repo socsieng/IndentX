@@ -170,7 +170,9 @@ def generator(input, expected):
         result = renderer.render()
 
         if expected != result:
+            print 'expected (length %s):', len(expected)
             print expected
+            print 'result (length %s):', len(expected)
             print result
             
         self.assertEqual(expected, result)
