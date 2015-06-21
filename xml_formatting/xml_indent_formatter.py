@@ -9,6 +9,10 @@
 # Copyright (c) 2015, Socheat Sieng <socsieng@gmail.com>
 
 import re
+from general_formatting.string_utility import join
+
+comment_exp = re.compile(r'<!--([\s\S]*?)-->', re.M)
+preserve_indent_exp = re.compile('\\n\\s*(.*)', re.M)
 
 class XmlIndentFormatter(object):
     position = 0
@@ -19,9 +23,7 @@ class XmlIndentFormatter(object):
     openExp = re.compile(r'<(?![/?!])[^>]+(?<!/)>')
     closeExp = re.compile(r'</[^>]+>')
     selfClosingExp = re.compile(r'<[^>]+/>')
-    openCommentExp = re.compile(r'<!--')
-    closeCommentExp = re.compile(r'-->')
-    expressions = [openExp, closeExp, openCommentExp, closeCommentExp, selfClosingExp]
+    expressions = [openExp, closeExp, selfClosingExp, comment_exp]
     trimExp = re.compile(r'(^\s*|\s*$)')
 
     def __init__(self, indentString = '\t'):
@@ -55,7 +57,7 @@ class XmlIndentFormatter(object):
                 pos = m.end()
 
                 if m.re == self.openExp:
-                    output += pre + self.beforeString + (self.indentString * self.depth) + match
+                    output = join(self.beforeString, output + pre, (self.indentString * self.depth) + match)
                     self.depth += 1
                     self.add = True
 
@@ -66,20 +68,16 @@ class XmlIndentFormatter(object):
                         self.depth -= 1
                     else:
                         self.depth -= 1
-                        output += pre + self.beforeString + (self.indentString * self.depth) + match
+                        output = join(self.beforeString, output + pre, (self.indentString * self.depth) + match)
 
                     self.add = False
 
-                elif m.re == self.openCommentExp:
-                    output += pre + self.beforeString + (self.indentString * self.depth) + match
-                    self.add = True
-
-                elif m.re == self.closeCommentExp:
-                    output += pre + match
-                    self.add = True
+                elif m.re == comment_exp:
+                    output = join(self.beforeString, output + pre, (self.indentString * self.depth) + format_comment(match, self.indentString * self.depth))
+                    self.add = False
 
                 else:
-                    output += pre + self.beforeString + (self.indentString * self.depth) + match
+                    output = join(self.beforeString, output + pre, (self.indentString * self.depth) + match)
                     self.add = False
 
                 self.prevDepth = self.depth
@@ -89,3 +87,12 @@ class XmlIndentFormatter(object):
 
         blank = re.compile(r'^\s*$\r?\n', re.M)
         return blank.sub('', output)
+
+def format_comment(comment, indent):
+    match = comment_exp.search(comment)
+    if match:
+        output = join(' ', '<!--', preserve_indent_exp.sub('\n' + indent + '     \\1', match.group(1)), '-->')
+
+        return output
+
+    return comment

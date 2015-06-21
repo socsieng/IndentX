@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+<!-- comment -->
+<child attribute1="value 1" attribute2="value 2">
+<!--another comment-->
+</child>
+<!-- this is a multi-line comment,
+				it spans multiple lines -->
+</root>

@@ -22,7 +22,7 @@ class XmlIndentFormatterTestCases(TestCase):
     def test_should_format_xml_with_comment(self):
         formatter = XmlIndentFormatter(' ')
         formattedText = formatter.indent('<root><!--comment--><child></child></root>')
-        expect(formattedText).to_equal('<root>\n <!--comment-->\n <child></child>\n</root>')
+        expect(formattedText).to_equal('<root>\n <!-- comment -->\n <child></child>\n</root>')
 
     def test_should_format_malformed_xml(self):
         formatter = XmlIndentFormatter(' ')
