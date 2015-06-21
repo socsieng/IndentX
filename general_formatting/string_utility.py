@@ -60,10 +60,10 @@ def join(char, *params):
     is_first = True
     output = ''
     for p in params:
-        if p == '':
-            continue
-
         if is_first:
+            if p == '':
+                continue
+
             is_first = False
             output += strip_trailing(p, char)
         else:

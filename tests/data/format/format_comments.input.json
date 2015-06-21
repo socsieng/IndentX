@@ -1,0 +1,23 @@
+// comment before document
+/* block comment
+before document */
+{
+/* block comment
+ * inside document*/
+type: "basic document", // describes value
+property: 'property value'
+                /* comment block
+                * that span multiple lines:
+                *   * bullet point
+                *   * another bullet point*/
+                /* another comment block
+                * that span multiple lines:
+                *   * bullet point
+                *   * another bullet point
+                *
+                * but this block has ends on a newline
+                */
+}
+/*block comment
+after document*/
+// comment after document

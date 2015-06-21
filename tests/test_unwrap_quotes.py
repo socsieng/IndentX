@@ -57,3 +57,15 @@ class UnwrapQuotesTestCase(TestCase):
     def test_should_join_multiple_strings_preserving_first_string_stripping_others(self):
         output = join('/', '/1/', '/2/', '/3')
         expect(output).to_equal('/1/2/3')
+
+    def test_should_join_multiple_strings_with_new_lines(self):
+        output = join('\n', '', '1', '2', '3')
+        expect(output).to_equal('1\n2\n3')
+
+    def test_should_join_end_object_to_json_with_new_line(self):
+        output = join('\n', '{\n  "hello": "world"', '}')
+        expect(output).to_equal('{\n  "hello": "world"\n}')
+
+    def test_should_join_whitespace_to_json_with_new_line(self):
+        output = join('\n', '{\n  "hello": "world"', ' ')
+        expect(output).to_equal('{\n  "hello": "world"\n ')

@@ -13,8 +13,28 @@ import copy
 
 from json_formatting.json_reader_value import *
 from json_formatting.string_reader import *
-from general_formatting.string_utility import is_string_value, ensure_quotes
-    
+from general_formatting.string_utility import is_string_value, ensure_quotes, join, strip_trailing
+
+block_comment_exp = re.compile('(/\\*)(\\s*[\\s\\S]*?\\s*)(\\*/)', re.M)
+preserve_indent_exp = re.compile('\\n\\s*(.*)', re.M)
+
+def format_block_comment(comment, indent):
+    def indenter(match):
+        if len(match.group(1)) == 0:
+            return '\n' + indent
+        elif match.group(1)[0] == '*':
+            return '\n' + indent + ' ' + match.group(1)
+        else:
+            return '\n' + indent + '   ' + match.group(1)
+
+    match = block_comment_exp.search(comment)
+    if match:
+        output = join(' ', match.group(1), preserve_indent_exp.sub(indenter, match.group(2)), match.group(3))
+
+        return output
+
+    return comment
+
 class JsonFormatter:
     default_options = {
         'indent_character': '  ',
@@ -68,9 +88,7 @@ class JsonFormatter:
 
             # new line
             if should_linebreak:
-                if len(output) > 0 and output[len(output) - 1] == ' ':
-                    output = output[:len(output) - 1]
-                output += '\n' + indent * self._options['indent_character']
+                output = join('\n', strip_trailing(output, ' '), indent * self._options['indent_character'])
 
 
             # actual character
@@ -78,10 +96,14 @@ class JsonFormatter:
                 output += ensure_quotes(result.value, self._options['quote_char'])
             elif result.type == 'value' and 'normalize_strings' in self._options and self._options['normalize_strings'] and is_string_value(result.value):
                 output += ensure_quotes(result.value, self._options['quote_char'])
-            elif result.type == 'end_line_comment' or result.type == 'in_line_comment_block':
-                if len(output) > 0 and output[len(output) - 1] == ' ':
-                    output = output[:len(output) - 1]
+            elif result.type == 'end_line_comment':
+                output = strip_trailing(output, ' ')
                 output += ' ' + result.value
+            elif result.type == 'new_line_comment_block':
+                output += format_block_comment(result.value, indent * self._options['indent_character']) + '\n'
+            elif result.type == 'in_line_comment_block':
+                output = strip_trailing(output, ' ')
+                output += ' ' + format_block_comment(result.value, indent * self._options['indent_character'])
             else:
                 output += result.value
 
@@ -91,7 +113,7 @@ class JsonFormatter:
                 output += ' '
             elif result.type == 'value_separator':
                 output += ' '
-            elif result.type == 'new_line_comment_block':
+            elif result.type == 'in_line_comment_block':
                 output += ' '
 
         return output

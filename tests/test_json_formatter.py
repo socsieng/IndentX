@@ -149,7 +149,7 @@ class JsonFormatterTestCase(TestCase):
         formatter = JsonFormatter(reader, {'force_property_quotes': True})
 
         output = formatter.format()
-        expect(output).to_equal('{\n  "\\"hello\\"": "world",\n  /* comment\nblock */\n  "value": 123\n}')
+        expect(output).to_equal('{\n  "\\"hello\\"": "world",\n  /* comment\n     block */\n  "value": 123\n}')
 
     def test_should_preserve_in_line_comment_block(self):
         reader = JsonReader('{\'"hello"\':"world", /* comment block */ \'value\':123}')
@@ -164,12 +164,20 @@ def generator(input, expected):
         formatter = JsonFormatter(reader, {'force_property_quotes': True, 'indent_character': '\t', 'normalize_strings': True})
 
         result = formatter.format()
+
+        if expected != result:
+            print 'expected (length %s):', len(expected)
+            print expected
+            print 'result (length %s):', len(expected)
+            print result
+
+        self.maxDiff = None
         self.assertEqual(expected, result)
     return test
 
 fs_test.load_testcases(
     JsonFormatterTestCase,
     generator,
-    os.path.dirname(__file__), 
+    os.path.dirname(__file__),
     'data/format/*.input.json',
     'expected.json')
