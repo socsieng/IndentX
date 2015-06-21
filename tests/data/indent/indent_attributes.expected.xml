@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html:form isRoot=true>
+	<html:checkbox label="uncheck this box" checked />
+	<html:text label="username" required />
+</html:form>
