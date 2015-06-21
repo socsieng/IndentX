@@ -1,0 +1,14 @@
+{
+"yaml_convert": {
+preserves_order: "true",
+'converts_quotes': 'yes',
+'indents': true,
+indentation: {
+character: 'based on view',
+amount:'also based on view',
+arr: [1,2,3],
+// some comments work
+"known_issues":
+["comments not working properly"]
+}}
+}

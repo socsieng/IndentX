@@ -1,0 +1,6 @@
+<form method="post" action="login">
+<label><span>username:</span><input type="text" name="username" required /></label>
+<label><span>password:</span><input type="password" name="password" required /></label>
+<label><input type="checkbox" name="remember" checked /><span>remember me</span></label>
+<button>log in</button>
+</form>

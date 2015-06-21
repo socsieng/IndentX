@@ -23,6 +23,14 @@ The *Indent* command will format both XML and JSON like content (content guess b
 * Mac: `command` + `k` + `,`
 * Linux: `control` + `k` + `,`
 
+*XML before indenting:*
+
+![Before XML indenting](docs/images/xml_before.png)
+
+*XML after indenting:*
+
+![After XML indenting](docs/images/xml_after.png)
+
 ### IndentX: Indent & format JSON
 
 The *Indent & format JSON* will try and indent and convert JavaScript-like objects to JSON (e.g. wrapping attributes in `"` and converting `'` strings to `"`). It can be accessed using the following keyboard short-cuts (think curly braces: `control`/`command` + `k` + `{`):
@@ -41,6 +49,11 @@ Note: If starting with a JavaScript object and you want to maintain the JavaScip
 ### IndentX: Convert JSON to YAML
 
 The *Convert JSON to YAML* command will try to convert a JSON document into YAML. As this feature is still very new, my personal experience with YAML is limited, this feature should be considered very *alpha*. Please [submit any issues](https://github.com/socsieng/IndentX/issues) you may have.
+
+*JSON before and YAML after converting:*
+
+![Before YAML conversion](docs/images/yaml_before.png)
+![After YAML conversion](docs/images/yaml_after.png)
 
 ## How it works
 
