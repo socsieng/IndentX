@@ -41,16 +41,13 @@ class GeneralFormatterTestCases(TestCase):
         formattedText = formatter.format(' ', '\t')
         expect(formattedText).to_equal(None)
 
-def generator(input, expected):
-    def test(self):
-        formatter = GeneralFormatter()
-        result = formatter.format(input, '\t')
-        self.assertEqual(expected, result)
-    return test
+def result_resolver(input):
+    formatter = GeneralFormatter()
+    return formatter.format(input, '\t')
 
 fs_test.load_testcases(
     GeneralFormatterTestCases,
-    generator,
-    os.path.dirname(__file__), 
+    result_resolver,
+    os.path.dirname(__file__),
     'data/indent/*.input.xml',
     'expected.xml')

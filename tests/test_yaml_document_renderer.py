@@ -162,25 +162,15 @@ class YamlFormatterTestCase(TestCase):
         output = renderer.render()
         expect(output).to_equal('"hello": world # comment block\n# comment block\nvalue: 123')
 
-def generator(input, expected):
-    def test(self):
-        reader = JsonReader(input)
-        document = document_builder.build(reader)
-        renderer = YamlDocumentRenderer(document, {'indent_character': '\t'})
-        result = renderer.render()
-
-        if expected != result:
-            print 'expected (length %s):', len(expected)
-            print expected
-            print 'result (length %s):', len(expected)
-            print result
-            
-        self.assertEqual(expected, result)
-    return test
+def result_resolver(input):
+    reader = JsonReader(input)
+    document = document_builder.build(reader)
+    renderer = YamlDocumentRenderer(document, {'indent_character': '\t'})
+    return renderer.render()
 
 fs_test.load_testcases(
     YamlFormatterTestCase,
-    generator,
-    os.path.dirname(__file__), 
+    result_resolver,
+    os.path.dirname(__file__),
     'data/format/*.input.json',
     'expected.yaml')

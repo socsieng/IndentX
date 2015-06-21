@@ -15,12 +15,23 @@ import io
 
 file_name_expression = re.compile('^[^.]+')
 
-def generator(a, b):
+def equality_test_generator(expected, result):
     def test(self):
-        self.assertEqual(a, b)
+        if expected != result:
+            print()
+            print('expected (length ' + str(len(expected)) + '):')
+            print('------------------------------------')
+            print(expected)
+            print('************************************')
+            print('result (length ' + str(len(result)) + '):')
+            print('------------------------------------')
+            print(result)
+
+        self.maxDiff = None
+        self.assertEqual(expected, result)
     return test
 
-def load_testcases(target_class, test_generator, base_dir, input_files_expression, expected_result_suffix):
+def load_testcases(target_class, result_resolver, base_dir, input_files_expression, expected_result_suffix):
     base_input_files_expression = os.path.join(base_dir, input_files_expression)
     files = glob.glob(base_input_files_expression)
     for f in files:
@@ -30,7 +41,7 @@ def load_testcases(target_class, test_generator, base_dir, input_files_expressio
             if os.path.exists(result_path):
                 input_string = io.open(f).read()
                 expected_string = io.open(result_path).read()
-                test = test_generator(input_string, expected_string)
+                test = equality_test_generator(expected_string, result_resolver(input_string))
                 setattr(target_class, 'test_' + test_case_name, test)
 
 def get_testcase_name(file_path):

@@ -158,26 +158,15 @@ class JsonFormatterTestCase(TestCase):
         output = formatter.format()
         expect(output).to_equal('{\n  "\\"hello\\"": "world", /* comment block */\n  "value": 123\n}')
 
-def generator(input, expected):
-    def test(self):
-        reader = JsonReader(input)
-        formatter = JsonFormatter(reader, {'force_property_quotes': True, 'indent_character': '\t', 'normalize_strings': True})
+def result_resolver(input):
+    reader = JsonReader(input)
+    formatter = JsonFormatter(reader, {'force_property_quotes': True, 'indent_character': '\t', 'normalize_strings': True})
 
-        result = formatter.format()
-
-        if expected != result:
-            print 'expected (length %s):', len(expected)
-            print expected
-            print 'result (length %s):', len(expected)
-            print result
-
-        self.maxDiff = None
-        self.assertEqual(expected, result)
-    return test
+    return formatter.format()
 
 fs_test.load_testcases(
     JsonFormatterTestCase,
-    generator,
+    result_resolver,
     os.path.dirname(__file__),
     'data/format/*.input.json',
     'expected.json')
