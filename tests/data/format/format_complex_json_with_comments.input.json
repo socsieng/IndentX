@@ -1,10 +1,10 @@
 {json_format: {preserves_order: true,'converts_quotes': 'yes','indents': true,empty_single:'',empty_double:"",indentation: {character: 'based on view',amount:'also based on view',arr: [1,2,3]},"arr_arr": [[1, 2], [3, 4], [5, 6]],
 "arr_obj": [{
 "abc": 123,
-"xyz: 456"
+"xyz": 456
 }, {
 "abc": 123,
-"xyz: 456"
+"xyz": 456
 }]
 // also supports these comments
 /* and block comments */

@@ -391,7 +391,6 @@ class JsonReaderTestCase(TestCase):
         result = reader.read()
         expect(result).to_be_true()
         expect(result.type).to_equal('value')
-        expect(result.value).to_equal('after')
 
     def test_should_find_expression_like_value(self):
         reader = JsonReader('abc + 123 - xyz')
@@ -424,3 +423,65 @@ class JsonReaderTestCase(TestCase):
         expect(result).to_be_true()
         expect(result.type).to_equal('value')
         expect(result.value).to_equal('abc("hello")')
+
+    def test_should_read_property_with_asterisk(self):
+        reader = JsonReader('{"*":"asterisk"}')
+
+        result = reader.read()
+        expect(result).to_be_true()
+        expect(result.type).to_equal('begin_object')
+        expect(result.value).to_equal('{')
+
+        result = reader.read()
+        expect(result).to_be_true()
+        expect(result.type).to_equal('property')
+        expect(result.value).to_equal('"*"')
+
+        result = reader.read()
+        expect(result).to_be_true()
+        expect(result.type).to_equal('property_separator')
+        expect(result.value).to_equal(':')
+
+        result = reader.read()
+        expect(result).to_be_true()
+        expect(result.type).to_equal('value')
+        expect(result.value).to_equal('"asterisk"')
+
+        result = reader.read()
+        expect(result).to_be_true()
+        expect(result.type).to_equal('end_object')
+        expect(result.value).to_equal('}')
+
+        result = reader.read()
+        expect(result).to_be_false()
+
+    def test_should_read_json_with_unterminated_strings(self):
+        reader = JsonReader('{"hello\n:"world\n}')
+
+        result = reader.read()
+        expect(result).to_be_true()
+        expect(result.type).to_equal('begin_object')
+        expect(result.value).to_equal('{')
+
+        result = reader.read()
+        expect(result).to_be_true()
+        expect(result.type).to_equal('property')
+        expect(result.value).to_equal('"hello')
+
+        result = reader.read()
+        expect(result).to_be_true()
+        expect(result.type).to_equal('property_separator')
+        expect(result.value).to_equal(':')
+
+        result = reader.read()
+        expect(result).to_be_true()
+        expect(result.type).to_equal('value')
+        expect(result.value).to_equal('"world')
+
+        result = reader.read()
+        expect(result).to_be_true()
+        expect(result.type).to_equal('end_object')
+        expect(result.value).to_equal('}')
+
+        result = reader.read()
+        expect(result).to_be_false()

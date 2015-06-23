@@ -13,6 +13,8 @@ import re
 from json_formatting.json_reader_value import *
 from json_formatting.string_reader import *
 
+property_exp = re.compile('\\s*:')
+
 class JsonReader:
     tokens = [
         ['begin_object', re.compile('\\{')],
@@ -21,12 +23,14 @@ class JsonReader:
         ['end_array', re.compile('\\]')],
         ['property_separator', re.compile(':')],
         ['value_separator', re.compile(',')],
-        ['property', re.compile('[\'"\\w_\\-+.]+(?=\\s*:)')],
-        ['value', re.compile('([\'"\\w_\\-+.][\'"\\w_\\-+. \\t()]*)(?!\\s*:)(?=[\\n,]?)')],
         ['new_line_comment', re.compile('^\\s*//.+$', re.M)],
         ['end_line_comment', re.compile('//.+$', re.M)],
         ['new_line_comment_block', re.compile('^\\s*/\\*[\\s\\S]*?\\*/', re.M)],
-        ['in_line_comment_block', re.compile('/\\*[\\s\\S]*?\\*/', re.M)]
+        ['in_line_comment_block', re.compile('/\\*[\\s\\S]*?\\*/', re.M)],
+        ['string', re.compile('".*?(?<!\\\\)"', re.M)],
+        ['string', re.compile('\'.*?(?<!\\\\)\'', re.M)],
+        ['property', re.compile('[\'"\\w_\\-+.*]+(?=\\s*:)')],
+        ['value', re.compile('([\'"\\w_\\-+.*][\'"\\w_\\-+.* \\t()]*)(?!\\s*:)(?=[\\n,]?)')]
     ]
 
     def __init__(self, json):
@@ -55,7 +59,13 @@ class JsonReader:
             value = min_match.group(0)
             token_type = min_token[0]
 
-            if token_type == 'property' or token_type == 'value':
+            if token_type == 'string':
+                prop_sep = property_exp.search(self._json, min_match.end())
+                if prop_sep and prop_sep.start() == min_match.end():
+                    token_type = 'property'
+                else:
+                    token_type = 'value'
+            elif token_type == 'property' or token_type == 'value':
                 sr = StringReader(self._json, min_match.start())
                 string_value = sr.read()
 

@@ -1,0 +1,12 @@
+{
+	"glob": {
+		"**": {
+			"description": "all files",
+			"pattern": "**"
+		},
+		"readme.md": {
+			"description": "all readme files",
+			"pattern": "**/readme.md"
+		}
+	}
+}
