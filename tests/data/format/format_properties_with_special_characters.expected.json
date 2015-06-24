@@ -1,5 +1,5 @@
 {
-	"glob": {
+	"glob_pattern": {
 		"**": {
 			"description": "all files",
 			"pattern": "**"
@@ -11,6 +11,17 @@
 		"**/*.sql": {
 			"description": "all sql files",
 			"pattern": "**/*.sql"
+		}
+	},
+	"windows": {
+		"c:\\": {
+			"type": "drive"
+		},
+		"d:\\": {
+			"type": "drive"
+		},
+		"d:\\temp\\": {
+			"type": "folder"
 		}
 	}
 }

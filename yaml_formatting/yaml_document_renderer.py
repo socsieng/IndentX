@@ -18,7 +18,7 @@ from general_formatting.document import Document
 from general_formatting.property import Property
 from general_formatting.property_name import PropertyName
 from general_formatting.value import Value
-    
+
 class YamlDocumentRenderer:
     default_options = {
         'indent_character': '  ',
@@ -55,7 +55,10 @@ class YamlDocumentRenderer:
                 output = strip_trailing(output, ' ') + self.render_comment(item, indent)
             elif isinstance(item, Property):
                 output += '\n' + indent * self._options['indent_character']
-                output += item.name.value + ': '
+                if re.compile('[^\\w]').search(item.name.value):
+                    output += wrap_quotes(item.name.value, self._options['quote_char']) + ': '
+                else:
+                    output += item.name.value + ': '
 
                 if len(item.name.comments):
                     output = join(' ', output, self.render_comments(item.name.comments, indent + 1))

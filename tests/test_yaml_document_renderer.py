@@ -112,39 +112,39 @@ class YamlFormatterTestCase(TestCase):
         renderer = YamlDocumentRenderer(document, {'force_property_quotes': True})
 
         output = renderer.render()
-        expect(output).to_equal('"hello": world # comment\nvalue: 123')
+        expect(output).to_equal('"\\"hello\\"": world # comment\nvalue: 123')
 
     def test_should_preserve_end_line_comment_forcing_new_line_for_subsequent_tokens(self):
-        reader = JsonReader('{\'"hello"\':"world",\n// full line comment\n\'value\'://comment\n123}')
+        reader = JsonReader('{"hello":"world",\n// full line comment\n\'value\'://comment\n123}')
         document = document_builder.build(reader)
         renderer = YamlDocumentRenderer(document, {'force_property_quotes': True})
 
         output = renderer.render()
-        expect(output).to_equal('"hello": world\n# full line comment\nvalue: # comment\n  123')
+        expect(output).to_equal('hello: world\n# full line comment\nvalue: # comment\n  123')
 
     def test_should_preserve_multiple_end_line_comment_forcing_new_line_for_subsequent_tokens(self):
-        reader = JsonReader('{\'"hello"\':"world",\n// full line comment\n\'value\'://comment\n//comment\n123}')
+        reader = JsonReader('{"hello":"world",\n// full line comment\n\'value\'://comment\n//comment\n123}')
         document = document_builder.build(reader)
         renderer = YamlDocumentRenderer(document, {'force_property_quotes': True})
 
         output = renderer.render()
-        expect(output).to_equal('"hello": world\n# full line comment\nvalue: # comment\n  # comment\n  123')
+        expect(output).to_equal('hello: world\n# full line comment\nvalue: # comment\n  # comment\n  123')
 
     def test_should_preserve_new_line_comment_block(self):
-        reader = JsonReader('{\'"hello"\':"world",\n/* comment\nblock */ \'value\':123}')
+        reader = JsonReader('{"hello":"world",\n/* comment\nblock */ \'value\':123}')
         document = document_builder.build(reader)
         renderer = YamlDocumentRenderer(document, {'force_property_quotes': True})
 
         output = renderer.render()
-        expect(output).to_equal('"hello": world\n# comment\n# block\nvalue: 123')
+        expect(output).to_equal('hello: world\n# comment\n# block\nvalue: 123')
 
     def test_should_preserve_new_line_comment_block_in_nested_object(self):
-        reader = JsonReader('{obj:{\'"hello"\':"world",\n/* comment\nblock */ \'value\':123}}')
+        reader = JsonReader('{obj:{\'hello\':"world",\n/* comment\nblock */ \'value\':123}}')
         document = document_builder.build(reader)
         renderer = YamlDocumentRenderer(document, {'force_property_quotes': True})
 
         output = renderer.render()
-        expect(output).to_equal('obj:\n  "hello": world\n  # comment\n  # block\n  value: 123')
+        expect(output).to_equal('obj:\n  hello: world\n  # comment\n  # block\n  value: 123')
 
     def test_should_preserve_in_line_comment_block(self):
         reader = JsonReader('{\'"hello"\':"world", /* comment block */ \'value\':123}')
@@ -152,15 +152,15 @@ class YamlFormatterTestCase(TestCase):
         renderer = YamlDocumentRenderer(document, {'force_property_quotes': True})
 
         output = renderer.render()
-        expect(output).to_equal('"hello": world # comment block\nvalue: 123')
+        expect(output).to_equal('"\\"hello\\"": world # comment block\nvalue: 123')
 
     def test_should_preserve_multiple_line_comments_block(self):
-        reader = JsonReader('{\'"hello"\':"world", /* comment block */\n/*comment block*/ \'value\':123}')
+        reader = JsonReader('{\'hello\':"world", /* comment block */\n/*comment block*/ \'value\':123}')
         document = document_builder.build(reader)
         renderer = YamlDocumentRenderer(document, {'force_property_quotes': True})
 
         output = renderer.render()
-        expect(output).to_equal('"hello": world # comment block\n# comment block\nvalue: 123')
+        expect(output).to_equal('hello: world # comment block\n# comment block\nvalue: 123')
 
 def result_resolver(input):
     reader = JsonReader(input)

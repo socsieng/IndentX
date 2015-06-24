@@ -13,7 +13,7 @@ from preggy import expect
 from tests.base import TestCase
 from general_formatting.string_utility import unwrap_quotes, wrap_quotes, join
 
-class UnwrapQuotesTestCase(TestCase):
+class StringUtilTestCase(TestCase):
     def test_should_unwrap_basic_single_quotes(self):
         output = unwrap_quotes('\'hello\'')
         expect(output).to_equal('hello')
@@ -21,6 +21,10 @@ class UnwrapQuotesTestCase(TestCase):
     def test_should_unwrap_basic_double_quotes(self):
         output = unwrap_quotes('"hello"')
         expect(output).to_equal('hello')
+
+    def test_should_unwrap_back_slashes_in_double_quotes(self):
+        output = unwrap_quotes('"c:\\\\"')
+        expect(output).to_equal('c:\\')
 
     def test_should_unwrap_single_quotes_containing_double_quote_characters(self):
         output = unwrap_quotes('\'hello "world"\'')

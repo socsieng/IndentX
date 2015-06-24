@@ -1,4 +1,4 @@
-glob:
+glob_pattern:
 	"**":
 		description: all files
 		pattern: **
@@ -8,3 +8,10 @@ glob:
 	"**/*.sql":
 		description: all sql files
 		pattern: **/*.sql
+windows:
+	"c:\\":
+		type: drive
+	"d:\\":
+		type: drive
+	"d:\\temp\\":
+		type: folder

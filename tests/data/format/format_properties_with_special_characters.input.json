@@ -1,5 +1,5 @@
 {
-glob: {
+glob_pattern: {
 "**": {
 description: "all files",
 pattern: "**"
@@ -12,5 +12,8 @@ pattern: '**/readme.md'
 description: "all sql files",
 pattern: "**/*.sql"
 }
+},
+"windows": {
+'c:\\': {type: "drive"},"d:\\": {type: 'drive'},"d:\\temp\\": {type: "folder"}
 }
 }

@@ -18,7 +18,7 @@ def ensure_quotes(input_string, quote_char = '"'):
     other_char = '\'' if quote_char == '"' else '"'
     esc_quote_exp = re.compile('(?<!\\\\)(' + quote_char + ')')
     unesc_quote_exp = re.compile('(\\\\' + other_char + ')')
-    wrap_exp = re.compile('^["\']?(.*?)["\']?$')
+    wrap_exp = re.compile('^["\']?(.*?)["\']?$', re.M)
 
     def quote_replacer(match):
         inner = match.group(1)
@@ -32,7 +32,7 @@ def ensure_quotes(input_string, quote_char = '"'):
 
 def wrap_quotes(input_string, quote_char = '"'):
     other_char = '\'' if quote_char == '"' else '"'
-    esc_quote_exp = re.compile('(?<!\\\\)(' + quote_char + ')')
+    esc_quote_exp = re.compile('(?<!\\\\)([\\\\' + quote_char + '])')
     unesc_quote_exp = re.compile('(\\\\' + other_char + ')')
 
     output = unesc_quote_exp.sub(other_char, input_string)
@@ -43,7 +43,7 @@ def unwrap_quotes(input_string):
     if is_string_value(input_string):
         output = re.compile('^' + input_string[0]).sub('', input_string)
         output = re.compile(input_string[0] + '$').sub('', output)
-        output = re.compile('\\\\').sub('', output)
+        output = re.compile('\\\\([\\\\"\'])').sub('\\1', output)
         return output
 
     return input_string

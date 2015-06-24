@@ -27,8 +27,8 @@ class JsonReader:
         ['end_line_comment', re.compile('//.+$', re.M)],
         ['new_line_comment_block', re.compile('^\\s*/\\*[\\s\\S]*?\\*/', re.M)],
         ['in_line_comment_block', re.compile('/\\*[\\s\\S]*?\\*/', re.M)],
-        ['string', re.compile('".*?(?<!\\\\)"', re.M)],
-        ['string', re.compile('\'.*?(?<!\\\\)\'', re.M)],
+        ['string', re.compile('".*?((?<!\\\\)|(?<=\\\\\\\\))"', re.M)],
+        ['string', re.compile('\'.*?((?<!\\\\)|(?<=\\\\\\\\))\'', re.M)],
         ['property', re.compile('[\'"\\w_\\-+.*]+(?=\\s*:)')],
         ['value', re.compile('([\'"\\w_\\-+.*][\'"\\w_\\-+.* \\t()]*)(?!\\s*:)(?=[\\n,]?)')]
     ]
@@ -60,8 +60,8 @@ class JsonReader:
             token_type = min_token[0]
 
             if token_type == 'string':
-                prop_sep = property_exp.search(self._json, min_match.end())
-                if prop_sep and prop_sep.start() == min_match.end():
+                prop_sep = property_exp.match(self._json, min_match.end())
+                if prop_sep:
                     token_type = 'property'
                 else:
                     token_type = 'value'
