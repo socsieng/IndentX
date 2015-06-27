@@ -18,5 +18,6 @@ class IndentCommand(FormatCommandBase):
 
     def format(self, text, options):
         formatter = GeneralFormatter()
+        print(text)
         formattedText = formatter.format(text, options['indent_character'])
         return formattedText
