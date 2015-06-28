@@ -25,6 +25,12 @@ test:
 unit:
 	@coverage run --branch `which nosetests` -vv --with-yanc -s $(TESTS)
 
+# watches for modified files and executes tests
+# requires watch command
+# npm install watch -g
+watch:
+	@watch "make unit TESTS=$(TESTS)" -d
+
 coverage: test
 
 # show coverage in html format
