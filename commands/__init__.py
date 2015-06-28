@@ -12,3 +12,4 @@ from commands.indent_command import IndentCommand
 from commands.format_json_command import FormatJsonCommand
 from commands.format_yaml_command import FormatYamlCommand
 from commands.report_issue_command import ReportIssueCommand
+from commands.unindent_command import UnindentCommand

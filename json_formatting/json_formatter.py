@@ -39,7 +39,10 @@ class JsonFormatter:
     default_options = {
         'indent_character': '  ',
         'quote_char': '"',
-        'normalize_strings': False
+        'normalize_strings': False,
+        'spacer': ' ',
+        'newline': '\n',
+        'remove_comments': False
     }
 
     def __init__(self, json_reader, options = None):
@@ -55,10 +58,14 @@ class JsonFormatter:
         reader = self._reader
         has_properties = False
         is_last_token_comment = False
+        spacer = self._options['spacer']
+        newline = self._options['newline']
+        remove_comments = self._options['remove_comments']
 
         while True:
             should_linebreak = False
             result = reader.read()
+            is_comment = False
 
             if not result:
                 break
@@ -78,17 +85,25 @@ class JsonFormatter:
                 should_linebreak = True
                 has_properties = True
             elif result.type == 'new_line_comment':
+                is_comment = True
                 is_last_token_comment = True
                 should_linebreak = True
             elif result.type == 'end_line_comment':
+                is_comment = True
                 is_last_token_comment = True
             elif result.type == 'new_line_comment_block':
+                is_comment = True
                 should_linebreak = True
+            elif result.type == 'in_line_comment_block':
+                is_comment = True
+
+            if is_comment and remove_comments:
+                continue
 
 
             # new line
             if should_linebreak:
-                output = join('\n', strip_trailing(output, ' '), indent * self._options['indent_character'])
+                output = join(newline, strip_trailing(output, spacer), indent * self._options['indent_character'])
 
 
             # actual character
@@ -97,23 +112,23 @@ class JsonFormatter:
             elif result.type == 'value' and 'normalize_strings' in self._options and self._options['normalize_strings'] and is_string_value(result.value):
                 output += ensure_quotes(result.value, self._options['quote_char'])
             elif result.type == 'end_line_comment':
-                output = strip_trailing(output, ' ')
-                output += ' ' + result.value
+                output = strip_trailing(output, spacer)
+                output += spacer + result.value
             elif result.type == 'new_line_comment_block':
-                output += format_block_comment(result.value, indent * self._options['indent_character']) + '\n'
+                output += format_block_comment(result.value, indent * self._options['indent_character']) + newline
             elif result.type == 'in_line_comment_block':
-                output = strip_trailing(output, ' ')
-                output += ' ' + format_block_comment(result.value, indent * self._options['indent_character'])
+                output = strip_trailing(output, spacer)
+                output += spacer + format_block_comment(result.value, indent * self._options['indent_character'])
             else:
                 output += result.value
 
 
             # suffix
             if result.type == 'property_separator':
-                output += ' '
+                output += spacer
             elif result.type == 'value_separator':
-                output += ' '
+                output += spacer
             elif result.type == 'in_line_comment_block':
-                output += ' '
+                output += spacer
 
         return output

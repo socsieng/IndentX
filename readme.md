@@ -12,6 +12,7 @@ Supported content types:
 * IndentX: Indent
 * IndentX: Indent & format JSON
 * IndentX: Convert JSON to YAML
+* IndentX: Unindent
 * IndentX: Report issue
 
 Note: *IndentX: Convert JSON to YAML* should be considered *alpha*.
@@ -55,6 +56,10 @@ The *Convert JSON to YAML* command will try to convert a JSON document into YAML
 
 ![Before YAML conversion](docs/images/yaml_before.png)
 ![After YAML conversion](docs/images/yaml_after.png)
+
+### IndentX: Unindent
+
+The *Unindent* command removes comments and whitespace to format content into one line.
 
 ### IndentX: Report issue
 

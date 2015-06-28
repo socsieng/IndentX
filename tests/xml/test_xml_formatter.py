@@ -28,3 +28,8 @@ class XmlIndentFormatterTestCases(TestCase):
         formatter = XmlIndentFormatter(' ')
         formattedText = formatter.indent('<root><child><child with="this attribute" and="that attribute" /></root>')
         expect(formattedText).to_equal('<root>\n <child>\n  <child with="this attribute" and="that attribute" />\n </root>')
+
+    def test_should_format_malformed_xml(self):
+        formatter = XmlIndentFormatter('', True)
+        formattedText = formatter.indent('<root>\n <!-- comment -->\n <child a="1"\nb="2"></child>\n</root>')
+        expect(formattedText).to_equal('<root><child a="1" b="2"></child></root>')

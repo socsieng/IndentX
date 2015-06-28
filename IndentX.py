@@ -50,13 +50,21 @@ class JsonToYamlCommand(sublime_plugin.TextCommand):
     def run(self, edit):
         self.command.run(edit)
 
+class BasicUnindentCommand(sublime_plugin.TextCommand):
+    def __init__(self, view):
+        sublime_plugin.TextCommand.__init__(self, view)
+        self.command = commands.UnindentCommand(self.view, sublime)
+
+    def is_enabled(self):
+        return self.command.is_enabled()
+
+    def run(self, edit):
+        self.command.run(edit)
+
 class ReportIssueCommand(sublime_plugin.TextCommand):
     def __init__(self, view):
         sublime_plugin.TextCommand.__init__(self, view)
         self.command = commands.ReportIssueCommand(self.view, os, sys)
-
-    def is_enabled(self):
-        return self.command.is_enabled()
 
     def run(self, edit):
         self.command.run(edit)

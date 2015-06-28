@@ -30,3 +30,17 @@ class GeneralFormatter:
                 else:
                     formatter = JsonFormatter(JsonReader(text), {'indent_character': indent_char})
                     return formatter.format()
+
+    def unindent(self, text):
+        if text:
+            match = first_char_exp.search(text)
+
+            if match:
+                first_char = match.group(1)
+
+                if first_char == '<':
+                    formatter = XmlIndentFormatter('', True)
+                    return formatter.indent(text)
+                else:
+                    formatter = JsonFormatter(JsonReader(text), {'remove_comments': True, 'spacer': '', 'newline': '', 'indent_character': ''})
+                    return formatter.format()

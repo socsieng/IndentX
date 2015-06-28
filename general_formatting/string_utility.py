@@ -49,10 +49,14 @@ def unwrap_quotes(input_string):
     return input_string
 
 def strip_leading(input_string, char):
+    if not char:
+        return input_string
     start_exp = re.compile('^' + re.escape(char) + '+')
     return start_exp.sub('', input_string)
 
 def strip_trailing(input_string, char):
+    if not char:
+        return input_string
     end_exp = re.compile(re.escape(char) + '+$')
     return end_exp.sub('', input_string)
 

@@ -14,5 +14,9 @@
   {
     "command": "report_issue",
     "caption": "IndentX: Report issue"
+  },
+  {
+    "command": "basic_unindent",
+    "caption": "IndentX: Unindent"
   }
 ]

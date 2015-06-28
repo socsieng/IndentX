@@ -158,6 +158,27 @@ class JsonFormatterTestCase(TestCase):
         output = formatter.format()
         expect(output).to_equal('{\n  "\\"hello\\"": "world", /* comment block */\n  "value": 123\n}')
 
+    def test_should_strip_comment(self):
+        reader = JsonReader('{\'"hello"\':"world", // comment\n \'value\':123}')
+        formatter = JsonFormatter(reader, {'force_property_quotes': True, 'remove_comments': True})
+
+        output = formatter.format()
+        expect(output).to_equal('{\n  "\\"hello\\"": "world",\n  "value": 123\n}')
+
+    def test_should_strip_in_line_comment_block(self):
+        reader = JsonReader('{\'"hello"\':"world", /* comment block */ \'value\':123}')
+        formatter = JsonFormatter(reader, {'force_property_quotes': True, 'remove_comments': True})
+
+        output = formatter.format()
+        expect(output).to_equal('{\n  "\\"hello\\"": "world",\n  "value": 123\n}')
+
+    def test_should_format_json_on_one_line(self):
+        reader = JsonReader('{"hello":\n  "world", // comment\n \'value\':123}')
+        formatter = JsonFormatter(reader, {'force_property_quotes': True, 'remove_comments': True, 'spacer': '', 'newline': '', 'indent_character': ''})
+
+        output = formatter.format()
+        expect(output).to_equal('{"hello":"world","value":123}')
+
 def result_resolver(input):
     reader = JsonReader(input)
     formatter = JsonFormatter(reader, {'force_property_quotes': True, 'indent_character': '\t', 'normalize_strings': True})

@@ -256,3 +256,28 @@ class ReportIssueCommandTestCase(TestCase):
         command.run(edit)
 
         os.system.assert_called_once_with('open "%s"' % create_issue_url('Indent'))
+
+class UnindentCommandTestCase(TestCase):
+    def test_should_invoke_command_with_no_regions(self):
+        region = mock_regions(['{\n}'])[0]
+        sublime = mock_sublime(region)
+        view = mock_sublime_view([], lambda sel: sel())
+        edit = mock_sublime_edit()
+
+        command = commands.UnindentCommand(view, sublime)
+        command.run(edit)
+
+        view.replace.assert_called_once_with(edit, region, '{}')
+
+    def test_should_invoke_command_with_multiple_regions(self):
+        regions = mock_regions([ '{ }', '[ ]' ])
+        sublime = mock_sublime()
+        view = mock_sublime_view(regions, lambda sel: sel())
+        edit = mock_sublime_edit()
+
+        command = commands.UnindentCommand(view, sublime)
+        command.run(edit)
+
+        expect(view.replace.call_count).to_equal(2)
+        view.replace.assert_any_call(edit, regions[0], '{}')
+        view.replace.assert_any_call(edit, regions[1], '[]')

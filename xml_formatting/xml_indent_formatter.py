@@ -24,10 +24,12 @@ class XmlIndentFormatter(object):
     closeExp = re.compile(r'</[^>]+>')
     selfClosingExp = re.compile(r'<[^>]+/>')
     expressions = [openExp, closeExp, selfClosingExp, comment_exp]
+    openExpSpace = re.compile(r'\s+')
     trimExp = re.compile(r'(^\s*|\s*$)')
 
-    def __init__(self, indentString = '\t'):
+    def __init__(self, indentString = '\t', removeComments = False):
         self.indentString = indentString
+        self.removeComments = removeComments
 
     def getFirstMatch(self, string, startPos):
         pos = len(string)
@@ -48,6 +50,10 @@ class XmlIndentFormatter(object):
         pos = 0
         m = None
         e = None
+        newline = self.beforeString
+
+        if self.indentString == '':
+            newline = ''
 
         while True:
             m = self.getFirstMatch(xml, pos)
@@ -57,7 +63,7 @@ class XmlIndentFormatter(object):
                 pos = m.end()
 
                 if m.re == self.openExp:
-                    output = join(self.beforeString, output + pre, (self.indentString * self.depth) + match)
+                    output = join(newline, output + pre, (self.indentString * self.depth) + self.openExpSpace.sub(' ', match))
                     self.depth += 1
                     self.add = True
 
@@ -68,16 +74,18 @@ class XmlIndentFormatter(object):
                         self.depth -= 1
                     else:
                         self.depth -= 1
-                        output = join(self.beforeString, output + pre, (self.indentString * self.depth) + match)
+                        output = join(newline, output + pre, (self.indentString * self.depth) + match)
 
                     self.add = False
 
                 elif m.re == comment_exp:
-                    output = join(self.beforeString, output + pre, (self.indentString * self.depth) + format_comment(match, self.indentString * self.depth))
+                    if self.removeComments:
+                        continue
+                    output = join(newline, output + pre, (self.indentString * self.depth) + format_comment(match, self.indentString * self.depth))
                     self.add = False
 
                 else:
-                    output = join(self.beforeString, output + pre, (self.indentString * self.depth) + match)
+                    output = join(newline, output + pre, (self.indentString * self.depth) + match)
                     self.add = False
 
                 self.prevDepth = self.depth

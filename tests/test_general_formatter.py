@@ -41,6 +41,16 @@ class GeneralFormatterTestCases(TestCase):
         formattedText = formatter.format(' ', '\t')
         expect(formattedText).to_equal(None)
 
+    def test_should_identify_and_unindent_basic_xml(self):
+        formatter = GeneralFormatter()
+        formattedText = formatter.unindent('<root>\n\t<child\na="123"></child>\n</root>')
+        expect(formattedText).to_equal('<root><child a="123"></child></root>')
+
+    def test_should_identify_and_unindent_basic_json(self):
+        formatter = GeneralFormatter()
+        formattedText = formatter.unindent('{\n\t"hello": "world",\n\t"value": 123\n}')
+        expect(formattedText).to_equal('{"hello":"world","value":123}')
+
 def result_resolver(input):
     formatter = GeneralFormatter()
     return formatter.format(input, '\t')
