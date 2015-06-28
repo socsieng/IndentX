@@ -15,6 +15,11 @@ from tests.base import TestCase
 from mock import Mock
 import commands
 
+def mock_sys(platform = None):
+    sys = Mock()
+    sys.platform = platform
+    return sys
+
 def mock_sublime(region = None):
     sublime = Mock()
     sublime.Region = Mock(return_value = region)
@@ -22,14 +27,22 @@ def mock_sublime(region = None):
 
 def mock_sublime_view(regions = None, substr = lambda sel: None):
     view = Mock()
-    view.settings = Mock(return_value = {
+    view.settings = Mock(return_value = mock_sublime_settings({
         'tab_size': 4
-    })
+    }))
 
     view.sel = Mock(return_value = regions)
     view.substr = substr
     view.replace = Mock()
     return view
+
+def mock_sublime_settings(dictionary):
+    def setter(key, value):
+        dictionary[key] = value
+    settings = Mock()
+    settings.get = lambda key, default_value = None: default_value if not key in dictionary else dictionary[key]
+    settings.set = setter
+    return settings
 
 def mock_regions(contents):
     sublime_regions = []
@@ -44,6 +57,11 @@ def mock_regions(contents):
 def mock_sublime_edit():
     edit = Mock()
     return edit
+
+def mock_os():
+    os = Mock()
+    os.system = Mock()
+    return os
 
 class IndentCommandTestCase(TestCase):
     def test_should_invoke_command_with_no_regions(self):
@@ -99,7 +117,7 @@ class FormatJsonCommandTestCase(TestCase):
         region = mock_regions(['{ hello: "world" }'])[0]
         sublime = mock_sublime(region)
         view = mock_sublime_view([], lambda sel: sel())
-        view.settings()['translate_tabs_to_spaces'] = True
+        view.settings().set('translate_tabs_to_spaces', True)
         edit = mock_sublime_edit()
 
         command = commands.FormatJsonCommand(view, sublime)
@@ -132,3 +150,62 @@ class FormatYamlCommandTestCase(TestCase):
         view.replace.assert_any_call(edit, regions[0], '')
         view.replace.assert_any_call(edit, regions[1], '')
         view.replace.assert_any_call(edit, regions[2], '- 1\n- 2')
+
+class ReportIssueCommandTestCase(TestCase):
+    def test_should_invoke_command_without_title_when_no_previous_command_executed(self):
+        sys = mock_sys('darwin')
+        os = mock_os()
+        view = mock_sublime_view()
+        edit = mock_sublime_edit()
+        command = commands.ReportIssueCommand(view, os, sys)
+        command.run(edit)
+
+        os.system.assert_called_once_with('open "https://github.com/socsieng/IndentX/issues/new"')
+
+    def test_should_invoke_command_without_title_when_no_previous_command_executed_linux(self):
+        sys = mock_sys('linux2')
+        os = mock_os()
+        view = mock_sublime_view()
+        edit = mock_sublime_edit()
+        command = commands.ReportIssueCommand(view, os, sys)
+        command.run(edit)
+
+        os.system.assert_called_once_with('xdg-open "https://github.com/socsieng/IndentX/issues/new"')
+
+    def test_should_invoke_command_without_title_when_no_previous_command_executed_windows(self):
+        sys = mock_sys('win32')
+        os = mock_os()
+        view = mock_sublime_view()
+        edit = mock_sublime_edit()
+        command = commands.ReportIssueCommand(view, os, sys)
+        command.run(edit)
+
+        os.system.assert_called_once_with('start "https://github.com/socsieng/IndentX/issues/new"')
+
+    def test_should_invoke_command_with_title_when_last_command_exists(self):
+        sys = mock_sys('darwin')
+        os = mock_os()
+        view = mock_sublime_view()
+        edit = mock_sublime_edit()
+        view.settings().set('indent_x_last_command', 'stuff')
+
+        command = commands.ReportIssueCommand(view, os, sys)
+        command.run(edit)
+
+        os.system.assert_called_once_with('open "https://github.com/socsieng/IndentX/issues/new?title=stuff"')
+
+    def test_should_invoke_command_with_title_after_command_executed(self):
+        sys = mock_sys('darwin')
+        region = mock_regions(['{ }'])[0]
+        sublime = mock_sublime(region)
+        view = mock_sublime_view([], lambda sel: sel())
+        os = mock_os()
+        edit = mock_sublime_edit()
+
+        command = commands.IndentCommand(view, sublime)
+        command.run(edit)
+
+        command = commands.ReportIssueCommand(view, os, sys)
+        command.run(edit)
+
+        os.system.assert_called_once_with('open "https://github.com/socsieng/IndentX/issues/new?title=Indent"')

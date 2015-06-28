@@ -12,6 +12,7 @@ class FormatCommandBase:
     def __init__(self, view, sublime):
         self.view = view
         self.sublime = sublime
+        self.command_name = ''
 
     def format(self, text, options):
         return None
@@ -19,12 +20,12 @@ class FormatCommandBase:
     def run(self, edit):
         regions = self.view.sel()
         indentString = '\t'
+        settings = self.view.settings()
 
-        if self.view.settings().get('translate_tabs_to_spaces'):
-            indentString = ' ' * self.view.settings().get('tab_size')
+        settings.set('indent_x_last_command', self.command_name)
 
-        if (len(regions) != 0):
-            print(regions[0])
+        if settings.get('translate_tabs_to_spaces'):
+            indentString = ' ' * settings.get('tab_size')
 
         if (len(regions) == 0 or regions[0].empty()):
             size = self.view.size()
@@ -34,5 +35,4 @@ class FormatCommandBase:
         for selection in regions:
             text = self.view.substr(selection)
             formattedText = self.format(text, { 'indent_character': indentString })
-            print edit, selection, formattedText
             self.view.replace(edit, selection, formattedText)

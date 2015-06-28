@@ -16,6 +16,7 @@ from json_formatting import JsonDocumentRenderer
 class FormatJsonCommand(FormatCommandBase):
     def __init__(self, view, sublime):
         FormatCommandBase.__init__(self, view, sublime)
+        self.command_name = 'Indent & Format JSON'
 
     def format(self, text, options):
         reader = JsonReader(text)

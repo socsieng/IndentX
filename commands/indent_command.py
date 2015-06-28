@@ -15,9 +15,9 @@ from general_formatting import document_builder
 class IndentCommand(FormatCommandBase):
     def __init__(self, view, sublime):
         FormatCommandBase.__init__(self, view, sublime)
+        self.command_name = 'Indent'
 
     def format(self, text, options):
         formatter = GeneralFormatter()
-        print(text)
         formattedText = formatter.format(text, options['indent_character'])
         return formattedText

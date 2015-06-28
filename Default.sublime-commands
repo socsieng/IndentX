@@ -10,5 +10,9 @@
   {
     "command": "json_to_yaml",
     "caption": "IndentX: Convert JSON to YAML"
+  },
+  {
+    "command": "report_issue",
+    "caption": "IndentX: Report issue"
   }
 ]

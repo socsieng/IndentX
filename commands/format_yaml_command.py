@@ -16,6 +16,7 @@ from general_formatting import document_builder
 class FormatYamlCommand(FormatCommandBase):
     def __init__(self, view, sublime):
         FormatCommandBase.__init__(self, view, sublime)
+        self.command_name = 'Convert JSON to YAML'
 
     def format(self, text, options):
         reader = JsonReader(text)

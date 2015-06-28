@@ -31,3 +31,8 @@ class JsonToYamlCommand(sublime_plugin.TextCommand):
     def run(self, edit):
         command = commands.FormatYamlCommand(self.view, sublime)
         command.run(edit)
+
+class ReportIssueCommand(sublime_plugin.TextCommand):
+    def run(self, edit):
+        command = commands.ReportIssueCommand(self.view, os, sys)
+        command.run(edit)
