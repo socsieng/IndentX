@@ -9,12 +9,13 @@
 # Copyright (c) 2015, Socheat Sieng <socsieng@gmail.com>
 
 import urllib
+import imp
 
-urlencode = None
-if hasattr(urllib, 'parse'):
-    urlencode = urllib.parse.urlencode
-else:
-    urlencode = urllib.urlencode
+try:
+    imp.find_module('urllib.parse')
+    from urllib.parse import urlencode
+except ImportError:
+    from urllib import urlencode
 
 from general_formatting.string_utility import join
 
