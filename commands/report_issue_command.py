@@ -9,13 +9,12 @@
 # Copyright (c) 2015, Socheat Sieng <socsieng@gmail.com>
 
 import urllib
-import imp
 
-try:
-    imp.find_module('urllib.parse')
-    from urllib.parse import urlencode
-except ImportError:
-    from urllib import urlencode
+urlencode = None
+if hasattr(urllib, 'parse'):
+    urlencode = urllib.parse.urlencode
+elif hasattr(urllib, 'urlencode'):
+    urlencode = urllib.urlencode
 
 from general_formatting.string_utility import join
 
@@ -43,6 +42,9 @@ class ReportIssueCommand:
         self.view = view
         self.os = os
         self.sys = sys
+
+    def is_enabled(self):
+        return urlencode != None
 
     def run(self, edit):
         regions = self.view.sel()

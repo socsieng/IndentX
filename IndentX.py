@@ -66,5 +66,8 @@ class ReportIssueCommand(sublime_plugin.TextCommand):
         sublime_plugin.TextCommand.__init__(self, view)
         self.command = commands.ReportIssueCommand(self.view, os, sys)
 
+    def is_enabled(self):
+        return self.command.is_enabled()
+
     def run(self, edit):
         self.command.run(edit)
