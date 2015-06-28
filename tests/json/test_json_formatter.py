@@ -168,5 +168,5 @@ fs_test.load_testcases(
     JsonFormatterTestCase,
     result_resolver,
     os.path.dirname(__file__),
-    'data/format/*.input.json',
+    '../data/format/*.input.json',
     'expected.json')

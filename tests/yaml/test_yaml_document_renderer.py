@@ -172,5 +172,5 @@ fs_test.load_testcases(
     YamlFormatterTestCase,
     result_resolver,
     os.path.dirname(__file__),
-    'data/format/*.input.json',
+    '../data/format/*.input.json',
     'expected.yaml')
