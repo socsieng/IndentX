@@ -8,6 +8,8 @@
 # http://www.opensource.org/licenses/MIT-license
 # Copyright (c) 2015, Socheat Sieng <socsieng@gmail.com>
 
+import os
+
 class FormatCommandBase:
     def __init__(self, view, sublime):
         self.view = view
@@ -36,3 +38,11 @@ class FormatCommandBase:
             text = self.view.substr(selection)
             formattedText = self.format(text, { 'indent_character': indentString })
             self.view.replace(edit, selection, formattedText)
+
+    def is_enabled(self):
+        return True
+
+    def get_language(self):
+        syntax_file = self.view.settings().get('syntax')
+        language = os.path.basename(syntax_file).replace('.tmLanguage', '').lower() if syntax_file != None else "plain text"
+        return language

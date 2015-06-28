@@ -18,21 +18,45 @@ sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 import commands
 
 class BasicIndentCommand(sublime_plugin.TextCommand):
+    def __init__(self, view):
+        sublime_plugin.TextCommand.__init__(self, view)
+        self.command = commands.IndentCommand(self.view, sublime)
+
+    def is_enabled(self):
+        return self.command.is_enabled()
+
     def run(self, edit):
-        command = commands.IndentCommand(self.view, sublime)
-        command.run(edit)
+        self.command.run(edit)
 
 class JsonIndentFormatCommand(sublime_plugin.TextCommand):
+    def __init__(self, view):
+        sublime_plugin.TextCommand.__init__(self, view)
+        self.command = commands.FormatJsonCommand(self.view, sublime)
+
+    def is_enabled(self):
+        return self.command.is_enabled()
+
     def run(self, edit):
-        command = commands.FormatJsonCommand(self.view, sublime)
-        command.run(edit)
+        self.command.run(edit)
 
 class JsonToYamlCommand(sublime_plugin.TextCommand):
+    def __init__(self, view):
+        sublime_plugin.TextCommand.__init__(self, view)
+        self.command = commands.FormatYamlCommand(self.view, sublime)
+
+    def is_enabled(self):
+        return self.command.is_enabled()
+
     def run(self, edit):
-        command = commands.FormatYamlCommand(self.view, sublime)
-        command.run(edit)
+        self.command.run(edit)
 
 class ReportIssueCommand(sublime_plugin.TextCommand):
+    def __init__(self, view):
+        sublime_plugin.TextCommand.__init__(self, view)
+        self.command = commands.ReportIssueCommand(self.view, os, sys)
+
+    def is_enabled(self):
+        return self.command.is_enabled()
+
     def run(self, edit):
-        command = commands.ReportIssueCommand(self.view, os, sys)
-        command.run(edit)
+        self.command.run(edit)

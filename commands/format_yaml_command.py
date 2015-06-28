@@ -23,4 +23,11 @@ class FormatYamlCommand(FormatCommandBase):
         document = document_builder.build(reader)
         renderer = YamlDocumentRenderer(document, {'indent_character': options['indent_character']})
         formattedText = renderer.render()
+
+        self.view.set_syntax_file('Packages/YAML/YAML.tmLanguage')
+
         return formattedText
+
+    def is_enabled(self):
+        language = self.get_language()
+        return language == 'json' or language == 'plain text'

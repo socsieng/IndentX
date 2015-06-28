@@ -101,6 +101,17 @@ class FormatJsonCommandTestCase(TestCase):
 
         view.replace.assert_called_once_with(edit, region, '{}')
 
+    def test_should_update_syntax(self):
+        region = mock_regions(['{ }'])[0]
+        sublime = mock_sublime(region)
+        view = mock_sublime_view([], lambda sel: sel())
+        edit = mock_sublime_edit()
+
+        command = commands.FormatJsonCommand(view, sublime)
+        command.run(edit)
+
+        view.set_syntax_file.assert_called_once_with('Packages/JavaScript/JSON.tmLanguage')
+
     def test_should_invoke_command_with_multiple_regions(self):
         regions = mock_regions([ '{ hello: "world" }', '[ ]' ])
         sublime = mock_sublime()
@@ -137,6 +148,41 @@ class FormatYamlCommandTestCase(TestCase):
         command.run(edit)
 
         view.replace.assert_called_once_with(edit, region, '')
+
+    def test_should_update_syntax(self):
+        region = mock_regions(['{ }'])[0]
+        sublime = mock_sublime(region)
+        view = mock_sublime_view([], lambda sel: sel())
+        edit = mock_sublime_edit()
+
+        command = commands.FormatYamlCommand(view, sublime)
+        command.run(edit)
+
+        view.set_syntax_file.assert_called_once_with('Packages/YAML/YAML.tmLanguage')
+
+    def test_should_be_enabled_when_language_json(self):
+        sublime = mock_sublime()
+        view = mock_sublime_view()
+        view.settings().set('syntax', 'Packages/JavaScript/JSON.tmLanguage')
+
+        command = commands.FormatYamlCommand(view, sublime)
+        expect(command.is_enabled()).to_equal(True)
+
+    def test_should_be_enabled_when_language_plain_text(self):
+        sublime = mock_sublime()
+        view = mock_sublime_view()
+        view.settings().set('syntax', 'Packages/Text/Plain text.tmLanguage')
+
+        command = commands.FormatYamlCommand(view, sublime)
+        expect(command.is_enabled()).to_equal(True)
+
+    def test_should_be_enabled_when_language_yaml(self):
+        sublime = mock_sublime()
+        view = mock_sublime_view()
+        view.settings().set('syntax', 'Packages/YAML/YAML.tmLanguage')
+
+        command = commands.FormatYamlCommand(view, sublime)
+        expect(command.is_enabled()).to_equal(False)
 
     def test_should_invoke_command_with_multiple_regions(self):
         regions = mock_regions([ '{ }', '[ ]', '[1,2]' ])
