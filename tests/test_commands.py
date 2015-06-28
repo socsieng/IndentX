@@ -14,6 +14,7 @@ from test_util import fs_test
 from tests.base import TestCase
 from mock import Mock
 import commands
+from commands.report_issue_command import create_issue_url
 
 def mock_sys(platform = None):
     sys = Mock()
@@ -160,7 +161,7 @@ class ReportIssueCommandTestCase(TestCase):
         command = commands.ReportIssueCommand(view, os, sys)
         command.run(edit)
 
-        os.system.assert_called_once_with('open "https://github.com/socsieng/IndentX/issues/new"')
+        os.system.assert_called_once_with('open "%s"' % create_issue_url('{command name}'))
 
     def test_should_invoke_command_without_title_when_no_previous_command_executed_linux(self):
         sys = mock_sys('linux2')
@@ -170,7 +171,7 @@ class ReportIssueCommandTestCase(TestCase):
         command = commands.ReportIssueCommand(view, os, sys)
         command.run(edit)
 
-        os.system.assert_called_once_with('xdg-open "https://github.com/socsieng/IndentX/issues/new"')
+        os.system.assert_called_once_with('xdg-open "%s"' % create_issue_url('{command name}'))
 
     def test_should_invoke_command_without_title_when_no_previous_command_executed_windows(self):
         sys = mock_sys('win32')
@@ -180,7 +181,7 @@ class ReportIssueCommandTestCase(TestCase):
         command = commands.ReportIssueCommand(view, os, sys)
         command.run(edit)
 
-        os.system.assert_called_once_with('start "https://github.com/socsieng/IndentX/issues/new"')
+        os.system.assert_called_once_with('start "%s"' % create_issue_url('{command name}'))
 
     def test_should_invoke_command_with_title_when_last_command_exists(self):
         sys = mock_sys('darwin')
@@ -192,7 +193,7 @@ class ReportIssueCommandTestCase(TestCase):
         command = commands.ReportIssueCommand(view, os, sys)
         command.run(edit)
 
-        os.system.assert_called_once_with('open "https://github.com/socsieng/IndentX/issues/new?title=stuff"')
+        os.system.assert_called_once_with('open "%s"' % create_issue_url('stuff'))
 
     def test_should_invoke_command_with_title_after_command_executed(self):
         sys = mock_sys('darwin')
@@ -208,4 +209,4 @@ class ReportIssueCommandTestCase(TestCase):
         command = commands.ReportIssueCommand(view, os, sys)
         command.run(edit)
 
-        os.system.assert_called_once_with('open "https://github.com/socsieng/IndentX/issues/new?title=Indent"')
+        os.system.assert_called_once_with('open "%s"' % create_issue_url('Indent'))

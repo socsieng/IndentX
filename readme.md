@@ -12,6 +12,7 @@ Supported content types:
 * IndentX: Indent
 * IndentX: Indent & format JSON
 * IndentX: Convert JSON to YAML
+* IndentX: Report issue
 
 Note: *IndentX: Convert JSON to YAML* should be considered *alpha*.
 
@@ -55,6 +56,10 @@ The *Convert JSON to YAML* command will try to convert a JSON document into YAML
 ![Before YAML conversion](docs/images/yaml_before.png)
 ![After YAML conversion](docs/images/yaml_after.png)
 
+### IndentX: Report issue
+
+Launches a browser window with the recommended issue structure.
+
 ## How it works
 
 IndentX uses regular expressions (probably more than it should) to identify tokens to:
@@ -71,3 +76,23 @@ This technique has the following benefits:
 ## Installation
 
 Install using Package Control.
+
+## Issues
+
+Please [report any issues](https://github.com/socsieng/IndentX/issues) with this plugin with the following sample structure in the body:
+
+    Issue with command: {command name}
+
+    Sample input:
+
+    ```
+    // provide sample here
+    ```
+
+    Expected result:
+
+    ```
+    // provide expected result here
+    ```
+
+Alternatively, the *IndentX: Report issue* command will launch a browser with this content pre-filled.

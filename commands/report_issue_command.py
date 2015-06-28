@@ -19,6 +19,23 @@ else:
 from general_formatting.string_utility import join
 
 issue_url = 'https://github.com/socsieng/IndentX/issues/new'
+issue_template = '''Issue with command: %s
+
+Sample input:
+
+```
+// provide sample here
+```
+
+Expected result:
+
+```
+// provide expected result here
+```
+'''
+
+def create_issue_url(command_name):
+    return join('?', issue_url, urlencode({'body': issue_template % command_name}))
 
 class ReportIssueCommand:
     def __init__(self, view, os, sys):
@@ -30,19 +47,15 @@ class ReportIssueCommand:
         regions = self.view.sel()
         indentString = '\t'
         settings = self.view.settings()
-        url = issue_url
 
         last_command = settings.get('indent_x_last_command')
 
-        if last_command:
-            url = join('?', url, urlencode({'title': last_command}))
+        url = create_issue_url(last_command if last_command else '{command name}')
 
-        cmd = ''
-        if self.sys.platform.startswith('darwin'):
-            cmd = 'open "%s"' % url
-        elif self.sys.platform.startswith('linux'):
-            cmd += 'xdg-open "%s"' % url
+        cmd = 'open "%s"'
+        if self.sys.platform.startswith('linux'):
+            cmd = 'xdg-open "%s"'
         elif self.sys.platform.startswith('win'):
-            cmd = 'start "%s"' % url
+            cmd = 'start "%s"'
 
-        self.os.system(cmd)
+        self.os.system(cmd % url)
