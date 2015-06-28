@@ -44,5 +44,5 @@ class FormatCommandBase:
 
     def get_language(self):
         syntax_file = self.view.settings().get('syntax')
-        language = os.path.basename(syntax_file).replace('.tmLanguage', '').lower() if syntax_file != None else "plain text"
+        language = os.path.basename(syntax_file).replace('.tmLanguage', '').lower() if syntax_file != None else 'plain text'
         return language
