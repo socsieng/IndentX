@@ -84,6 +84,14 @@ Install using Package Control.
 
 ## Issues
 
+### Known issues
+
+There is a known issue when upgrading from previous versions of IndentX where [sub modules aren't reloaded](https://github.com/socsieng/IndentX/issues/7). The work-around for this is to restart Sublime Text.
+
+A solution to this issue should be available soon.
+
+### Reporting issues
+
 Please [report any issues](https://github.com/socsieng/IndentX/issues) with this plugin with the following sample structure in the body:
 
     Issue with command: {command name}
