@@ -19,17 +19,17 @@ setup:
 
 # test your application (tests in the tests/ directory)
 test:
-	@coverage run --branch `which nosetests` -vv --with-yanc -s $(TESTS)
+	unit
 	@coverage report -m --fail-under=80
 
 unit:
 	@coverage run --branch `which nosetests` -vv --with-yanc -s $(TESTS)
 
 # watches for modified files and executes tests
-# requires watch command
-# npm install watch -g
-watch:
-	@watch "make unit TESTS=$(TESTS)" -d
+# requires chokidar-cli
+# npm install chokidar-cli -g
+watch: unit
+	@chokidar "**/*.py" -c "make unit TESTS=$(TESTS)" -i ".tox/**"
 
 coverage: test
 
