@@ -1,4 +1,6 @@
-# IndentX [![Build Status](https://travis-ci.org/socsieng/IndentX.svg)](https://travis-ci.org/socsieng/IndentX)
+# IndentX
+
+[![Build Status](https://travis-ci.org/socsieng/IndentX.svg)](https://travis-ci.org/socsieng/IndentX) [![Coverage Status](https://coveralls.io/repos/socsieng/IndentX/badge.svg?branch=master)](https://coveralls.io/r/socsieng/IndentX?branch=master)
 
 IndentX is a forgiving indentation plugin for Sublime Text inspired by [Indent Xml](https://sublime.wbond.net/packages/Indent%20XML), aimed primarily at preserving attribute ordering and working with *invalid* content.
 
