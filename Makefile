@@ -18,8 +18,7 @@ setup:
 	@pip install -U -e .\[tests\]
 
 # test your application (tests in the tests/ directory)
-test:
-	unit
+test: unit
 	@coverage report -m --fail-under=80
 
 unit:
