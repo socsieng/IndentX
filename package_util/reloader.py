@@ -10,35 +10,15 @@
 
 import sys
 import imp
+import json
+import os
+import io
 
-mods_load_order = [
-    'general_formatting.document',
-    'general_formatting.collection',
-    'general_formatting.comment',
-    'general_formatting.property',
-    'general_formatting.string_utility',
-    'general_formatting.property_name',
-    'general_formatting.value',
+mods_load_order = []
 
-    'json_formatting.json_reader_value',
-    'json_formatting.string_reader',
-    'json_formatting.json_reader',
-    'json_formatting.json_formatter',
-    'json_formatting.json_document_renderer',
-
-    'xml_formatting.xml_indent_formatter',
-    'general_formatting.general_formatter',
-
-    'general_formatting.document_builder',
-    'yaml_formatting.yaml_document_renderer',
-
-    'commands.format_command_base',
-    'commands.indent_command',
-    'commands.format_json_command',
-    'commands.format_yaml_command',
-    'commands.report_issue_command',
-    'commands.unindent_command'
-]
+with io.open(os.path.join(os.path.dirname(__file__), 'module_order.json')) as data_file:
+    data = json.load(data_file)
+    mods_load_order = data
 
 for mod in mods_load_order:
     if mod in sys.modules:
