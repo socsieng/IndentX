@@ -12,8 +12,15 @@ import os
 import sys
 import sublime
 import sublime_plugin
+import imp
 
 sys.path.append(os.path.dirname(os.path.realpath(__file__)))
+
+reloader_name = 'package_util.reloader'
+if reloader_name in sys.modules:
+    imp.reload(sys.modules[reloader_name])
+else:
+    import package_util.reloader
 
 import commands
 

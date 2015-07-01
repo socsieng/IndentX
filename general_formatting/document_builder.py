@@ -97,7 +97,7 @@ def create_value(valueResult, reader):
             break
 
         reader.move()
-        
+
         comment = handle_comments(result)
         if comment:
             val.comments.append(comment)

@@ -18,7 +18,7 @@ from general_formatting.document import Document
 from general_formatting.property import Property
 from general_formatting.property_name import PropertyName
 from general_formatting.value import Value
-    
+
 class JsonDocumentRenderer:
     default_options = {
         'indent_character': '  ',
