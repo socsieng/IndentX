@@ -10,7 +10,7 @@
 
 from preggy import expect
 
-from tests.base import TestCase
+from indent_x.tests.base import TestCase
 from indent_x.general_formatting.string_utility import unwrap_quotes, wrap_quotes, join
 
 class StringUtilTestCase(TestCase):

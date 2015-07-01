@@ -10,7 +10,7 @@
 
 from preggy import expect
 
-from tests.base import TestCase
+from indent_x.tests.base import TestCase
 from indent_x.json_formatting import JsonReader
 from indent_x.general_formatting import Collection
 from indent_x.general_formatting import Comment

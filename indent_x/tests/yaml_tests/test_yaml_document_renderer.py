@@ -12,7 +12,7 @@ from preggy import expect
 
 import os
 from indent_x.test_util import fs_test
-from tests.base import TestCase
+from indent_x.tests.base import TestCase
 from indent_x.general_formatting import document_builder
 from indent_x.json_formatting import JsonReader
 from indent_x.yaml_formatting import YamlDocumentRenderer

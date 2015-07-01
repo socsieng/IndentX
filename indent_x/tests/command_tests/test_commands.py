@@ -11,7 +11,7 @@
 from preggy import expect
 
 from indent_x.test_util import fs_test
-from tests.base import TestCase
+from indent_x.tests.base import TestCase
 from mock import Mock
 from indent_x import commands
 from indent_x.commands.report_issue_command import create_issue_url
