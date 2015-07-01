@@ -11,11 +11,11 @@ omit =
     *__init__.py
 branch = True
 source =
-    commands
-    general_formatting
-    json_formatting
-    xml_formatting
-    yaml_formatting
+    indent_x/commands
+    indent_x/general_formatting
+    indent_x/json_formatting
+    indent_x/xml_formatting
+    indent_x/yaml_formatting
 
 [report]
 exclude_lines =

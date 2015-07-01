@@ -16,13 +16,13 @@ import imp
 
 sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 
-reloader_name = 'package_util.reloader'
+reloader_name = 'indent_x.package_util.reloader'
 if reloader_name in sys.modules:
     imp.reload(sys.modules[reloader_name])
 else:
-    import package_util.reloader
+    import indent_x.package_util.reloader
 
-import commands
+from indent_x import commands
 
 class BasicIndentCommand(sublime_plugin.TextCommand):
     def __init__(self, view):
