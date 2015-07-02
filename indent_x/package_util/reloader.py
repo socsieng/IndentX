@@ -10,15 +10,14 @@
 
 import sys
 import imp
-import json
-import os
-import io
 
-mods_load_order = []
+modules_name = 'indent_x.package_util.modules'
+if modules_name in sys.modules:
+    imp.reload(sys.modules[modules_name])
 
-with io.open(os.path.join(os.path.dirname(__file__), 'module_order.json')) as data_file:
-    data = json.load(data_file)
-    mods_load_order = data
+from indent_x.package_util.modules import module_order
+
+mods_load_order = module_order
 
 for mod in mods_load_order:
     if mod in sys.modules:

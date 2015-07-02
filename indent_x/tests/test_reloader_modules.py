@@ -14,14 +14,9 @@ from indent_x.tests.base import TestCase
 import glob
 import os
 import re
-import io
-import json
+from indent_x.package_util.modules import module_order
 
-mods_load_order = []
-
-with io.open(os.path.join(os.path.dirname(__file__), '../package_util/module_order.json')) as data_file:
-    data = json.load(data_file)
-    mods_load_order = data
+mods_load_order = module_order
 
 module_expression = re.compile('^[./]*(.+)\.py$')
 special_exp = re.compile('[./]')
@@ -30,7 +25,7 @@ ignore_mod_exp = [
     re.compile('^indent_x\.test\.'),
     re.compile('^indent_x\.test_'),
     re.compile('^indent_x\.base$'),
-    re.compile('^indent_x\.package_util\.reloader$')
+    re.compile('^indent_x\.package_util\.')
 ]
 
 class ReloaderModuleTestCases(TestCase):

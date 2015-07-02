@@ -17,10 +17,14 @@ import imp
 sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 
 reloader_name = 'indent_x.package_util.reloader'
-if reloader_name in sys.modules:
-    imp.reload(sys.modules[reloader_name])
-else:
-    import indent_x.package_util.reloader
+
+try:
+    if reloader_name in sys.modules:
+        imp.reload(sys.modules[reloader_name])
+    else:
+        import indent_x.package_util.reloader
+except:
+    pass
 
 from indent_x import commands
 
