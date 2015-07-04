@@ -22,7 +22,7 @@ mods_load_order = module_order
 for mod in mods_load_order:
     if mod in sys.modules:
         try:
-            print('reloading: %s' % mod)
             imp.reload(sys.modules[mod])
-        except ImportError:
-            pass
+            print('reloaded %s' % mod)
+        except (ImportError) as e:
+            print('Error reloading %s\n%s' % (mod, e.message))
