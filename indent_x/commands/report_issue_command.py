@@ -11,10 +11,19 @@
 import urllib
 
 urlencode = None
-if hasattr(urllib, 'parse'):
+
+try:
+    from urllib import parse
     urlencode = urllib.parse.urlencode
-elif hasattr(urllib, 'urlencode'):
-    urlencode = urllib.urlencode
+except (ImportError) as e:
+    print(e.message)
+
+if urlencode == None:
+    try:
+        import urllib
+        urlencode = urllib.urlencode
+    except (ImportError) as e:
+        print(e.message)
 
 from indent_x.general_formatting.string_utility import join
 
@@ -59,6 +68,8 @@ class ReportIssueCommand:
         if self.sys.platform.startswith('linux'):
             cmd = 'xdg-open "%s"'
         elif self.sys.platform.startswith('win'):
-            cmd = 'start "%s"'
+            cmd = 'cmd /c start %s'
 
-        self.os.system(cmd % url)
+        cmd = cmd % url
+        print('executing: %s' % cmd)
+        self.os.system(cmd)

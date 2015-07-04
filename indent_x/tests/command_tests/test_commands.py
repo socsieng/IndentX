@@ -227,7 +227,7 @@ class ReportIssueCommandTestCase(TestCase):
         command = commands.ReportIssueCommand(view, os, sys)
         command.run(edit)
 
-        os.system.assert_called_once_with('start "%s"' % create_issue_url('{command name}'))
+        os.system.assert_called_once_with('cmd /c start %s' % create_issue_url('{command name}'))
 
     def test_should_invoke_command_with_title_when_last_command_exists(self):
         sys = mock_sys('darwin')
@@ -256,6 +256,17 @@ class ReportIssueCommandTestCase(TestCase):
         command.run(edit)
 
         os.system.assert_called_once_with('open "%s"' % create_issue_url('Indent'))
+
+    def test_command_should_be_enabled(self):
+        sys = mock_sys('darwin')
+        view = mock_sublime_view([], lambda sel: sel())
+        os = mock_os()
+        edit = mock_sublime_edit()
+
+        command = commands.ReportIssueCommand(view, os, sys)
+        enabled = command.is_enabled()
+
+        expect(enabled).to_equal(True)
 
 class UnindentCommandTestCase(TestCase):
     def test_should_invoke_command_with_no_regions(self):
