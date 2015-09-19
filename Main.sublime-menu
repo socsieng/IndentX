@@ -1,0 +1,36 @@
+[
+  {
+    "id": "selection",
+    "caption": "Selection",
+    "children":
+    [
+      {
+        "id": "indentx",
+        "caption": "IndentX",
+        "children":
+        [
+          {
+            "caption": "Indent",
+            "command": "basic_indent"
+          },
+          {
+            "caption": "Indent & format JSON",
+            "command": "json_indent_format"
+          },
+          {
+            "command": "json_to_yaml",
+            "caption": "Convert JSON to YAML"
+          },
+          {
+            "command": "basic_unindent",
+            "caption": "Unindent"
+          },
+          {
+            "command": "report_issue",
+            "caption": "Report issue"
+          }
+        ]
+      }
+    ]
+  }
+]
