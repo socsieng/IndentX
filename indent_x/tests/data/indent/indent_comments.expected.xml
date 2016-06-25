@@ -2,8 +2,8 @@
 <root>
 	<!-- comment -->
 	<child attribute1="value 1" attribute2="value 2">
-		<!-- another comment -->
+		<!--another comment-->
 	</child>
 	<!-- this is a multi-line comment,
-	     it spans multiple lines -->
+					it spans multiple lines -->
 </root>

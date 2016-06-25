@@ -12,7 +12,7 @@ import re
 from indent_x.general_formatting.string_utility import join
 
 comment_exp = re.compile(r'<!--([\s\S]*?)-->', re.M)
-preserve_indent_exp = re.compile('\\n\\s*(.*)', re.M)
+preserve_indent_exp = re.compile('^(.*)$', re.M)
 
 class XmlIndentFormatter(object):
     position = 0
@@ -27,9 +27,10 @@ class XmlIndentFormatter(object):
     openExpSpace = re.compile(r'\s+')
     trimExp = re.compile(r'(^\s*|\s*$)')
 
-    def __init__(self, indentString = '\t', removeComments = False):
+    def __init__(self, indentString = '\t', removeComments = False, removeEmptyLines = False):
         self.indentString = indentString
         self.removeComments = removeComments
+        self.removeEmptyLines = removeEmptyLines
 
     def getFirstMatch(self, string, startPos):
         pos = len(string)
@@ -81,7 +82,7 @@ class XmlIndentFormatter(object):
                 elif m.re == comment_exp:
                     if self.removeComments:
                         continue
-                    output = join(newline, output + pre, (self.indentString * self.depth) + format_comment(match, self.indentString * self.depth))
+                    output = join(newline, output + pre, format_comment(m.group(0), self.indentString * self.depth))
                     self.add = False
 
                 else:
@@ -93,13 +94,17 @@ class XmlIndentFormatter(object):
                 output += xml[pos:]
                 break
 
-        blank = re.compile(r'^\s*$\r?\n', re.M)
-        return blank.sub('', output)
+        if self.removeEmptyLines:
+            blank = re.compile(r'^\s*$\r?\n', re.M)
+            return blank.sub('', output)
+
+        return output
 
 def format_comment(comment, indent):
     match = comment_exp.search(comment)
+
     if match:
-        output = join(' ', '<!--', preserve_indent_exp.sub('\n' + indent + '     \\1', match.group(1)), '-->')
+        output = preserve_indent_exp.sub(indent + '\\1', match.group(0))
 
         return output
 
