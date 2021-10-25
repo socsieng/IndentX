@@ -23,6 +23,6 @@ class FormatJsonCommand(FormatCommandBase):
         formatter = JsonFormatter(reader, {'force_property_quotes': True, 'quote_char': '"', 'normalize_strings': True, 'indent_character': options['indent_character']})
         formattedText = formatter.format()
 
-        self.view.set_syntax_file('Packages/JavaScript/JSON.tmLanguage')
+        self.view.assign_syntax(self.sublime.find_syntax_by_name('JSON')[0])
 
         return formattedText
